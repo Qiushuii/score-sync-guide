@@ -1,0 +1,911 @@
+{
+ "_说明": "力度占位字（other-dynamics）对照原谱 PDF 查到的真实记号。每条：乐章、小节、声部（英文名，见 out/other_dynamics.json）、力度 dyn（MusicXML 元素名）、附加文字 words、PDF 页码。由 tools/apply_dynamics_pdf.py 生成 corrections.json 里 type=dynamic 的条目。规律：占位字原本多是'sempre ff''pp subito''pp espr.'这类力度加文字的复合记号，导入时解析失败。",
+ "entries": [
+  {
+   "mv": 2,
+   "m": 25,
+   "parts": [
+    "Bb Clarinet 1"
+   ],
+   "dyn": "p",
+   "words": "sempre",
+   "page": 79
+  },
+  {
+   "mv": 2,
+   "m": 32,
+   "parts": [
+    "Violoncello"
+   ],
+   "dyn": "pp",
+   "words": "subito",
+   "page": 79
+  },
+  {
+   "mv": 2,
+   "m": 36,
+   "parts": [
+    "Violin 2"
+   ],
+   "dyn": "pp",
+   "words": "espr.",
+   "page": 79
+  },
+  {
+   "mv": 2,
+   "m": 39,
+   "parts": [
+    "Violin 2"
+   ],
+   "dyn": "p",
+   "words": "subito",
+   "page": 80
+  },
+  {
+   "mv": 2,
+   "m": 46,
+   "parts": [
+    "Violin 1",
+    "Viola",
+    "Violoncello"
+   ],
+   "dyn": "pp",
+   "words": "sempre",
+   "page": 80
+  },
+  {
+   "mv": 2,
+   "m": 62,
+   "parts": [
+    "Bb Clarinet 1",
+    "Bb Clarinet 2"
+   ],
+   "dyn": "f",
+   "words": "sempre",
+   "page": 82
+  },
+  {
+   "mv": 2,
+   "m": 65,
+   "parts": [
+    "Violin 1"
+   ],
+   "dyn": "f",
+   "words": "sempre",
+   "page": 82
+  },
+  {
+   "mv": 2,
+   "m": 67,
+   "parts": [
+    "Flute 1",
+    "Flute 2"
+   ],
+   "dyn": "ff",
+   "words": "sempre",
+   "page": 82
+  },
+  {
+   "mv": 2,
+   "m": 84,
+   "parts": [
+    "Violoncello"
+   ],
+   "dyn": "f",
+   "words": "sempre",
+   "page": 85
+  },
+  {
+   "mv": 2,
+   "m": 102,
+   "parts": [
+    "Violoncello"
+   ],
+   "dyn": "pp",
+   "words": "sempre",
+   "page": 87
+  },
+  {
+   "mv": 2,
+   "m": 116,
+   "parts": [
+    "Violoncello"
+   ],
+   "dyn": "pp",
+   "words": "sempre",
+   "page": 89
+  },
+  {
+   "mv": 2,
+   "m": 118,
+   "parts": [
+    "Flute 1",
+    "Flute 2",
+    "Bb Clarinet 1",
+    "Bb Clarinet 2",
+    "Viola"
+   ],
+   "dyn": "pp",
+   "words": "sempre",
+   "page": 89
+  },
+  {
+   "mv": 2,
+   "m": 127,
+   "parts": [
+    "Violin 1"
+   ],
+   "dyn": "pp",
+   "words": "sempre",
+   "page": 90
+  },
+  {
+   "mv": 2,
+   "m": 129,
+   "parts": [
+    "Violin 2"
+   ],
+   "dyn": "pp",
+   "words": "sempre",
+   "page": 90
+  },
+  {
+   "mv": 2,
+   "m": 139,
+   "parts": [
+    "Violin 1"
+   ],
+   "dyn": "pp",
+   "words": "sempre",
+   "page": 91
+  },
+  {
+   "mv": 2,
+   "m": 150,
+   "parts": [
+    "Flute 1",
+    "Eb Clarinet"
+   ],
+   "dyn": "ff",
+   "words": "sempre",
+   "page": 93
+  },
+  {
+   "mv": 2,
+   "m": 154,
+   "parts": [
+    "F Horn 2 & 4",
+    "Horn in F 6 & 8"
+   ],
+   "dyn": "ff",
+   "words": "sempre",
+   "page": 93
+  },
+  {
+   "mv": 2,
+   "m": 155,
+   "parts": [
+    "Contrabass"
+   ],
+   "dyn": "ff",
+   "words": "sempre",
+   "page": 93
+  },
+  {
+   "mv": 2,
+   "m": 157,
+   "parts": [
+    "Flute 1",
+    "Flute 2",
+    "Bb Clarinet 1",
+    "Bb Clarinet 2",
+    "A Bass Clarinet",
+    "Bassoon 1",
+    "Contrabassoon",
+    "F Horn 1 & 3",
+    "F Horn 2 & 4",
+    "Horn in F 5 & 7",
+    "Horn in F 6 & 8",
+    "Violin 1",
+    "Violin 2"
+   ],
+   "dyn": "ff",
+   "words": "sempre",
+   "page": 94
+  },
+  {
+   "mv": 2,
+   "m": 160,
+   "parts": [
+    "Violin 1",
+    "Violin 2"
+   ],
+   "dyn": "f",
+   "words": "sempre",
+   "page": 94
+  },
+  {
+   "mv": 2,
+   "m": 160,
+   "parts": [
+    "Violoncello"
+   ],
+   "dyn": "ff",
+   "words": "sempre",
+   "page": 94
+  },
+  {
+   "mv": 2,
+   "m": 163,
+   "parts": [
+    "Bb Clarinet 1",
+    "Bb Clarinet 2",
+    "2 Harps",
+    "Violin 1",
+    "Violin 2",
+    "Viola",
+    "Violoncello"
+   ],
+   "dyn": "f",
+   "words": "sempre",
+   "page": 95
+  },
+  {
+   "mv": 2,
+   "m": 168,
+   "parts": [
+    "A Bass Clarinet",
+    "Bassoon 1"
+   ],
+   "dyn": "f",
+   "words": "sempre",
+   "page": 95
+  },
+  {
+   "mv": 2,
+   "m": 174,
+   "parts": [
+    "Viola"
+   ],
+   "dyn": "f",
+   "words": "sempre",
+   "page": 96
+  },
+  {
+   "mv": 2,
+   "m": 176,
+   "parts": [
+    "Oboe 1",
+    "Bb Clarinet 1",
+    "Bass Clarinet",
+    "Bassoon 1"
+   ],
+   "dyn": "ff",
+   "words": "sempre",
+   "page": 97
+  },
+  {
+   "mv": 2,
+   "m": 178,
+   "parts": [
+    "Bass Clarinet",
+    "Bassoon 1"
+   ],
+   "dyn": "ff",
+   "words": "sempre",
+   "page": 97
+  },
+  {
+   "mv": 2,
+   "m": 182,
+   "parts": [
+    "F Trumpet"
+   ],
+   "dyn": "pp",
+   "words": "subito",
+   "page": 97
+  },
+  {
+   "mv": 2,
+   "m": 187,
+   "parts": [
+    "Bb Clarinet 1"
+   ],
+   "dyn": "p",
+   "words": "sempre",
+   "page": 98
+  },
+  {
+   "mv": 1,
+   "m": 30,
+   "parts": [
+    "B♭ Clarinet 1"
+   ],
+   "dyn": "ff",
+   "page": 6,
+   "words": "sempre"
+  },
+  {
+   "mv": 1,
+   "m": 51,
+   "parts": [
+    "Viola"
+   ],
+   "dyn": "ff",
+   "page": 10,
+   "words": "sempre"
+  },
+  {
+   "mv": 1,
+   "m": 109,
+   "parts": [
+    "Violin 1",
+    "Violin 2",
+    "Viola"
+   ],
+   "dyn": "ff",
+   "page": 21,
+   "words": "sempre"
+  },
+  {
+   "mv": 1,
+   "m": 111,
+   "parts": [
+    "Violin 1",
+    "Violin 2"
+   ],
+   "dyn": "ff",
+   "page": 22,
+   "words": "sempre"
+  },
+  {
+   "mv": 1,
+   "m": 149,
+   "parts": [
+    "Violin 2"
+   ],
+   "dyn": "ff",
+   "page": 27
+  },
+  {
+   "mv": 1,
+   "m": 154,
+   "parts": [
+    "F Trumpet 1",
+    "B♭ Trumpet 3 - 4"
+   ],
+   "dyn": "ff",
+   "page": 28,
+   "words": "sempre"
+  },
+  {
+   "mv": 1,
+   "m": 166,
+   "parts": [
+    "Oboe 1 - 2",
+    "E♭ Clarinet",
+    "B♭ Clarinet 1",
+    "B♭ Clarinet 2 - 3"
+   ],
+   "dyn": "ff",
+   "page": 30,
+   "words": "sempre"
+  },
+  {
+   "mv": 1,
+   "m": 71,
+   "parts": [
+    "Violin 1"
+   ],
+   "dyn": "pp",
+   "words": "sempre",
+   "page": 13
+  },
+  {
+   "mv": 1,
+   "m": 73,
+   "parts": [
+    "Viola"
+   ],
+   "dyn": "pp",
+   "words": "sempre",
+   "page": 13
+  },
+  {
+   "mv": 1,
+   "m": 128,
+   "parts": [
+    "Snare Drum"
+   ],
+   "dyn": "p",
+   "words": "sempre",
+   "page": 24
+  },
+  {
+   "mv": 1,
+   "m": 137,
+   "parts": [
+    "Violoncello"
+   ],
+   "dyn": null,
+   "page": 25,
+   "note": "原谱此处没有力度记号，去掉占位字"
+  },
+  {
+   "mv": 1,
+   "m": 168,
+   "parts": [
+    "Flute 1 - 2"
+   ],
+   "dyn": null,
+   "page": 30,
+   "note": "原谱此处没有力度记号，去掉占位字"
+  },
+  {
+   "mv": 1,
+   "m": 174,
+   "parts": [
+    "Flute 1 - 2"
+   ],
+   "dyn": "ff",
+   "page": 31,
+   "words": "sempre"
+  },
+  {
+   "mv": 1,
+   "m": 174,
+   "parts": [
+    "Violin 1"
+   ],
+   "dyn": "f",
+   "page": 31,
+   "words": "sempre"
+  },
+  {
+   "mv": 1,
+   "m": 213,
+   "parts": [
+    "Violin 2"
+   ],
+   "dyn": "pp",
+   "page": 37,
+   "words": "sempre"
+  },
+  {
+   "mv": 1,
+   "m": 232,
+   "parts": [
+    "Violin 2"
+   ],
+   "dyn": "ppp",
+   "page": 38,
+   "words": "sempre"
+  },
+  {
+   "mv": 1,
+   "m": 246,
+   "parts": [
+    "Violin 1"
+   ],
+   "dyn": "pp",
+   "page": 39,
+   "words": "sempre"
+  },
+  {
+   "mv": 1,
+   "m": 259,
+   "parts": [
+    "Violin 1",
+    "Violoncello"
+   ],
+   "dyn": "ff",
+   "page": 41,
+   "words": "sempre"
+  },
+  {
+   "mv": 1,
+   "m": 259,
+   "parts": [
+    "Violin 2"
+   ],
+   "dyn": null,
+   "page": 41,
+   "note": "原谱此处没有力度记号，去掉占位字"
+  },
+  {
+   "mv": 1,
+   "m": 263,
+   "parts": [
+    "Violoncello",
+    "Contrabass"
+   ],
+   "dyn": "p",
+   "page": 41
+  },
+  {
+   "mv": 1,
+   "m": 295,
+   "parts": [
+    "Timpani"
+   ],
+   "dyn": "ff",
+   "page": 47,
+   "words": "sempre"
+  },
+  {
+   "mv": 1,
+   "m": 318,
+   "parts": [
+    "Violoncello",
+    "Contrabass"
+   ],
+   "dyn": "f",
+   "page": 50,
+   "words": "sempre"
+  },
+  {
+   "mv": 1,
+   "m": 334,
+   "parts": [
+    "Flute 1 - 2",
+    "Flute 3 - 4",
+    "Oboe 1 - 2",
+    "Oboe 3 - 4",
+    "A Clarinet"
+   ],
+   "dyn": "ff",
+   "page": 54,
+   "words": "sempre"
+  },
+  {
+   "mv": 1,
+   "m": 338,
+   "parts": [
+    "Contrabass"
+   ],
+   "dyn": "f",
+   "page": 54,
+   "words": "sempre"
+  },
+  {
+   "mv": 1,
+   "m": 343,
+   "parts": [
+    "Viola"
+   ],
+   "dyn": "ppp",
+   "page": 55,
+   "words": "sempre"
+  },
+  {
+   "mv": 1,
+   "m": 344,
+   "parts": [
+    "Violin 1",
+    "Violin 2",
+    "Violoncello"
+   ],
+   "dyn": "ppp",
+   "page": 55,
+   "words": "sempre"
+  },
+  {
+   "mv": 1,
+   "m": 382,
+   "parts": [
+    "Trombone 1"
+   ],
+   "dyn": "pp",
+   "page": 61,
+   "words": "sempre"
+  },
+  {
+   "mv": 1,
+   "m": 383,
+   "parts": [
+    "Trombone 2 - 3"
+   ],
+   "dyn": "pp",
+   "page": 61,
+   "words": "sempre"
+  },
+  {
+   "mv": 1,
+   "m": 407,
+   "parts": [
+    "Violin 1"
+   ],
+   "dyn": "ff",
+   "page": 64
+  },
+  {
+   "mv": 1,
+   "m": 407,
+   "parts": [
+    "Violin 2"
+   ],
+   "dyn": "ff",
+   "page": 64
+  },
+  {
+   "mv": 1,
+   "m": 423,
+   "parts": [
+    "Viola"
+   ],
+   "dyn": "ff",
+   "page": 67,
+   "words": "sempre"
+  },
+  {
+   "mv": 1,
+   "m": 425,
+   "parts": [
+    "Violin 1",
+    "Violin 2"
+   ],
+   "dyn": "ff",
+   "page": 67,
+   "words": "sempre"
+  },
+  {
+   "mv": 1,
+   "m": 425,
+   "parts": [
+    "Viola"
+   ],
+   "dyn": "ff",
+   "page": 67
+  },
+  {
+   "mv": 1,
+   "m": 417,
+   "parts": [
+    "Bassoon 1"
+   ],
+   "dyn": "ffp",
+   "page": 66
+  },
+  {
+   "mv": 1,
+   "m": 358,
+   "parts": [
+    "Violoncello"
+   ],
+   "dyn": "ffp",
+   "page": 58
+  },
+  {
+   "mv": 1,
+   "m": 480,
+   "parts": [
+    "F Horn 1 3 5 7"
+   ],
+   "dyn": "ff",
+   "page": 76,
+   "words": "sempre"
+  },
+  {
+   "mv": 1,
+   "m": 481,
+   "parts": [
+    "F Horn 2 4 6 8",
+    "F Trumpet 3 - 4",
+    "Violin 1",
+    "Violin 2"
+   ],
+   "dyn": "ff",
+   "page": 76,
+   "words": "sempre"
+  },
+  {
+   "mv": 1,
+   "m": 70,
+   "parts": [
+    "Oboe 1 - 2",
+    "Oboe 2 - 3"
+   ],
+   "dyn": null,
+   "page": 13,
+   "note": "原谱此处只有渐强、渐弱记号，没认出力度字，去掉占位字"
+  },
+  {
+   "mv": 1,
+   "m": 51,
+   "parts": [
+    "Violin 2"
+   ],
+   "dyn": null,
+   "page": 10,
+   "note": "原谱上没认出对应记号，去掉占位字"
+  },
+  {
+   "mv": 1,
+   "m": 79,
+   "parts": [
+    "Viola"
+   ],
+   "dyn": null,
+   "page": 15,
+   "note": "原谱上没认出对应记号，去掉占位字"
+  },
+  {
+   "mv": 3,
+   "m": 56,
+   "parts": [
+    "Flute 1 & 2"
+   ],
+   "dyn": "ff",
+   "page": 107,
+   "words": "sempre"
+  },
+  {
+   "mv": 3,
+   "m": 64,
+   "parts": [
+    "Violin 1"
+   ],
+   "dyn": "ff",
+   "page": 107,
+   "words": "sempre"
+  },
+  {
+   "mv": 3,
+   "m": 167,
+   "parts": [
+    "Violoncello",
+    "Contrabass"
+   ],
+   "dyn": "f",
+   "page": 117,
+   "words": "sempre"
+  },
+  {
+   "mv": 3,
+   "m": 201,
+   "parts": [
+    "Violin 1",
+    "Violin 2\nDivided",
+    "Viola"
+   ],
+   "dyn": "ff",
+   "page": 121,
+   "words": "sempre"
+  },
+  {
+   "mv": 3,
+   "m": 204,
+   "parts": [
+    "Violin 1",
+    "Violin 2\nDivided",
+    "Viola"
+   ],
+   "dyn": "sff",
+   "page": 122,
+   "words": "wie gepeitscht"
+  },
+  {
+   "mv": 3,
+   "m": 205,
+   "parts": [
+    "Violin 1",
+    "Violin 2\nDivided",
+    "Viola"
+   ],
+   "dyn": "sff",
+   "page": 122
+  },
+  {
+   "mv": 3,
+   "m": 222,
+   "parts": [
+    "Flute 1 & 2",
+    "Flute 3 & 4",
+    "Bassoon 1",
+    "Contrabassoon"
+   ],
+   "dyn": "ff",
+   "page": 124,
+   "words": "sempre"
+  },
+  {
+   "mv": 3,
+   "m": 246,
+   "parts": [
+    "Flute 1 & 2",
+    "Oboe 1",
+    "Oboe 2"
+   ],
+   "dyn": "ff",
+   "page": 126,
+   "words": "sempre"
+  },
+  {
+   "mv": 3,
+   "m": 278,
+   "parts": [
+    "Violin 1"
+   ],
+   "dyn": "pp",
+   "page": 129,
+   "words": "sempre"
+  },
+  {
+   "mv": 3,
+   "m": 286,
+   "parts": [
+    "Violoncello",
+    "Contrabass"
+   ],
+   "dyn": "pp",
+   "page": 131,
+   "words": "sempre"
+  },
+  {
+   "mv": 3,
+   "m": 317,
+   "parts": [
+    "Violin 2"
+   ],
+   "dyn": "p",
+   "page": 135
+  },
+  {
+   "mv": 3,
+   "m": 390,
+   "parts": [
+    "Flute 1 & 2",
+    "Oboe 2",
+    "A Clarinet",
+    "A Bass Clarinet",
+    "Bassoon 1",
+    "Viola",
+    "Contrabass"
+   ],
+   "dyn": "ff",
+   "page": 143,
+   "words": "sempre"
+  },
+  {
+   "mv": 3,
+   "m": 395,
+   "parts": [
+    "A Bass Clarinet",
+    "Bassoon 1"
+   ],
+   "dyn": "ff",
+   "page": 144,
+   "words": "sempre"
+  },
+  {
+   "mv": 3,
+   "m": 396,
+   "parts": [
+    "Flute 1 & 2"
+   ],
+   "dyn": "f",
+   "page": 144,
+   "words": "sempre"
+  },
+  {
+   "mv": 3,
+   "m": 423,
+   "parts": [
+    "Flute 3 & 4"
+   ],
+   "dyn": "pp",
+   "page": 147,
+   "words": "sempre"
+  },
+  {
+   "mv": 3,
+   "m": 433,
+   "parts": [
+    "Bb Clarinet 1"
+   ],
+   "dyn": "pp",
+   "page": 148,
+   "words": "sempre"
+  }
+ ]
+}

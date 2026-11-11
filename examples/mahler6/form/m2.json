@@ -1,0 +1,24 @@
+{
+  "_说明": "第二乐章（行板）曲式（右下结构卡用）。两级，from/to 为谱面小节号。曲式说法不一（回旋曲 / 变奏曲 / 轮回），这里按主题回来的位置与调号变化分段。草稿见 analysis/m2_行板.md。",
+  "movement": 2,
+  "note": "主题三次回来，中间是两段插段（曲式说法不一：回旋曲、变奏曲或“轮回”）",
+  "sources": ["usuo-guide", "serotsky-notes", "wiki-m6"],
+  "sections": [
+    {"label": "主题", "from": 0, "to": 55, "basis": "降 E 大调；第 28 小节主题再起（和声相似度 0.80）", "subs": [
+      {"label": "主题（降 E 大调）", "from": 0, "to": 27, "basis": "第一小提琴弱起 E♭–F–G，motif_scan 已核对"},
+      {"label": "主题再起", "from": 28, "to": 55, "basis": "排练记号 48，a tempo，始终加弱音器"}
+    ]},
+    {"label": "插段一", "from": 56, "to": 99, "basis": "调号一个升号；USUO：插段一从小调开始，转大调进入有牛铃的牧歌段", "subs": [
+      {"label": "小调开始", "from": 56, "to": 83, "basis": "第 56 小节 hervortretend，第 60 小节 Più moto"},
+      {"label": "牛铃、钢片琴（E 大调）", "from": 84, "to": 99, "basis": "调号四个升号；牛铃第 86–94 小节、钢片琴第 87–94 小节"}
+    ]},
+    {"label": "主题回来", "from": 100, "to": 114, "basis": "回到降 E 大调；第 99–100 小节双簧管、单簧管奏主题，motif_scan 已核对", "subs": []},
+    {"label": "插段二", "from": 115, "to": 172, "basis": "USUO：插段二以神秘的长笛、单簧管音型开始，逐渐推向高潮", "subs": [
+      {"label": "神秘地", "from": 115, "to": 123, "basis": "第 115 小节 Misterioso，ohne Ausdruck"},
+      {"label": "流动起来", "from": 124, "to": 145, "basis": "第 124 小节 Fliessend，调号三个升号"},
+      {"label": "高潮（牛铃）", "from": 146, "to": 172, "basis": "第 146 小节 E 大调；第 154 小节 fff，牛铃第 154–159 小节"}
+    ]},
+    {"label": "主题最后一次回来", "from": 173, "to": 184, "basis": "第 173 小节回到降 E 大调", "subs": []},
+    {"label": "尾声", "from": 185, "to": 201, "basis": "第 190 小节逐渐放慢，第 192 小节 Zeit lassen!，第 198 小节 Langsam", "subs": []}
+  ]
+}

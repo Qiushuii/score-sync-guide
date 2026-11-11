@@ -1,0 +1,1038 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>马勒六 · 第二乐章演示片段</title>
+<!-- 演示播放页：页面只负责"给定时刻 t 画出这一帧"（window.renderAt），由 render_frames.py 逐帧截图。
+     t 以秒计，0 = 第二乐章第 0 小节开头；t < 0 是乐章间过渡动画。
+     画面时间按谱面速度（Verovio 时间表），尚未与录音对齐。 -->
+<style>
+  :root {
+    --bg: #faf8f3; --ink: #1d1b18; --muted: #8a8478; --rule: #ddd6c8;
+    --red: #d1342b; --accent: #3d5a80; --card: #ffffff; --card2: #f3efe6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); color: var(--ink);
+    font-family: "Microsoft YaHei", "PingFang SC", sans-serif; }
+
+  /* ---------- 顶栏 ---------- */
+  #top { position: absolute; left: 0; top: 0; width: 1920px; height: 56px; display: flex;
+    align-items: center; justify-content: space-between; padding: 0 28px; border-bottom: 1px solid var(--rule); }
+  /* 用户 2026-11-08：曲名、乐章名用衬线体，乐章名中文 / 意大利文双语 */
+  #top .title { font-family: "Noto Serif SC", "Source Han Serif SC", "STSong", serif; font-size: 23px; letter-spacing: 1px;
+    display: flex; align-items: baseline; }
+  #top .title b { font-weight: 600; }
+  #top .title .sep { width: 1px; height: 22px; background: var(--rule); margin: 0 22px; align-self: center; }
+  #top .title .zh { font-weight: 500; letter-spacing: 2px; }
+  #top .title .tr { margin-left: 18px; letter-spacing: 1px; color: #2f2c27; }
+  #top .title .it { font-family: Georgia, "Times New Roman", serif; font-style: italic; font-size: 22px;
+    color: #4a463f; margin-left: 14px; letter-spacing: .3px; }
+  #top .demo { font-size: 15px; color: var(--muted); }
+
+  /* ---------- 谱面区 ---------- */
+  #names { position: absolute; left: 0; top: 56px; width: 150px; height: 1012px; }
+  .pname { position: absolute; right: 14px; font-size: 17px; white-space: nowrap; transform: translateY(-50%);
+    color: var(--ink); transition: none; }
+  .pname.focus { color: var(--accent); font-weight: 700; }
+  /* 共用行当前在奏的乐手编号（来自谱面标记），小字放在声部名下方 */
+  .pname .pl { display: block; text-align: right; font-size: 13px; line-height: 1.2; color: #6b6458;
+    font-weight: 400; margin-top: 1px; }
+  .pname .pl:empty { display: none; }
+  .pname .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 7px;
+    vertical-align: middle; }
+  #viewport { position: absolute; left: 150px; top: 56px; width: 1290px; height: 1012px; overflow: hidden; }
+  #scroller { position: absolute; left: 0; top: 0; will-change: transform; transform-origin: 0 0; }
+  /* 正在发声：整个音符（符头、符干、符尾、变音记号、附点、奏法记号）用 --hc 着色，--hc 由脚本按渐变计算 */
+  #scroller svg .hl, #scroller svg .hl * { fill: var(--hc) !important; stroke: var(--hc) !important; }
+  /* 符杠、延音线的红色副本：只显示播放线扫过的部分（由裁剪矩形控制） */
+  #scroller svg .sweep, #scroller svg .sweep * { fill: var(--red) !important; stroke: var(--red) !important; }
+  #playhead { position: absolute; top: 0; width: 5px; margin-left: -2.5px; height: 1012px; background: var(--red); opacity: .22; }  /* 用户 2026-11-08：5 像素；第七轮"降低透明度"，不透明度 0.22 → 0.5（在脚本里设） */
+  #overlay { position: absolute; left: 0; top: 0; width: 1290px; height: 1012px; pointer-events: none; }
+
+  /* 乐章间过渡的标题 */
+  #mvtTitle { position: absolute; left: 0; top: 0; width: 1290px; text-align: center; }
+  #mvtTitle .kicker { font-size: 20px; color: var(--muted); letter-spacing: 6px; }
+  #mvtTitle .big { font-family: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif; font-size: 64px;
+    margin-top: 10px; letter-spacing: 8px; }
+  #mvtTitle .sub { font-family: Georgia, "Times New Roman", serif; font-style: italic; font-size: 44px;
+    color: #4a463f; margin-top: 10px; }
+
+  /* ---------- 右侧卡片 ---------- */
+  /* 两张卡片上下排列：解析卡按内容长高（出现个人听感时变高），段落卡占剩下的高度 */
+  #cards { position: absolute; left: 1460px; top: 100px; width: 436px; height: 960px; display: flex; flex-direction: column; gap: 22px; }
+  .card { position: relative; width: 436px; border-radius: 10px; flex: none; }
+  #cardA { flex: 1 1 0; min-height: 0; overflow: visible; background: var(--card); border: 1px solid var(--rule);
+    box-shadow: 0 2px 10px rgba(60,50,30,.07); padding: 26px 28px; }
+  #cardB { flex: none; height: 300px; overflow: hidden; background: var(--card2); border: 1px dashed #cbbfa8; padding: 20px 24px; }
+  .kind { font-size: 14px; letter-spacing: 3px; color: var(--accent); }
+  #cardB .kind { color: var(--muted); }
+  /* 小节范围做成浏览器标签页的样子，立在解析卡上沿（用户 2026-11-08） */
+  /* 2026-11-08 改：白底、细边框与卡片相同，下沿盖住卡片上边框，两侧用反向圆角接进卡片，像浏览器当前标签页 */
+  /* 用户 2026-11-08 再改：两侧是平缓的 S 形曲线，从标签顶边一路滑进卡片上沿（像浏览器的标签页）。
+     标签主体只画上边框；两侧各用一段 SVG 曲线（白色填充 + 与卡片同色的细线），曲线底端落在卡片上边框上。 */
+  .card .tag { position: absolute; top: -33px; left: 48px; height: 34px; line-height: 33px; padding: 0 12px; z-index: 2;
+    background: var(--card); color: var(--accent); border-top: 1px solid var(--rule);
+    font-size: 15px; font-weight: 600; letter-spacing: 1.5px; }
+  .card .tag::before, .card .tag::after { content: ""; position: absolute; top: -1px; width: 28px; height: 35px;
+    background-size: 100% 100%; background-repeat: no-repeat; }
+  .card .tag::before { left: -28px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 35' preserveAspectRatio='none'%3E%3Cpath d='M0 35 C14 35 12 0.5 28 0.5 V35 Z' fill='%23ffffff'/%3E%3Cpath d='M0 34.5 C14 34.5 12 0.5 28 0.5' fill='none' stroke='%23ddd6c8' stroke-width='1'/%3E%3C/svg%3E"); }
+  .card .tag::after { right: -28px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 35' preserveAspectRatio='none'%3E%3Cpath d='M28 35 C14 35 16 0.5 0 0.5 V35 Z' fill='%23ffffff'/%3E%3Cpath d='M28 34.5 C14 34.5 16 0.5 0 0.5' fill='none' stroke='%23ddd6c8' stroke-width='1'/%3E%3C/svg%3E"); }
+  #cardA h2 { margin-top: 0; }
+  .card h2 { font-size: 27px; line-height: 1.35; margin: 10px 0 14px; font-weight: 700; }
+  #cardB h2 { font-size: 20px; font-weight: 600; margin: 6px 0 8px; color: #5b564d; }
+  .card p { font-size: 21px; line-height: 1.75; margin-bottom: 10px; }   /* 2026-11-08 由 19 加大到 21，视频上更易读，卡片也更满 */
+  #cardB p { font-size: 17px; line-height: 1.7; color: #5b564d; }
+  #caption { flex: none; background: #fff3d1; border: 1px solid #e0c56e; border-radius: 10px; padding: 18px 22px;
+    font-size: 24px; line-height: 1.5; font-weight: 600; color: #4a3b00; white-space: pre-line; }
+  #opinionBox { margin-top: 14px; background: var(--card2);
+    border: 1px dashed #cbbfa8; border-radius: 8px; padding: 12px 16px; display: none; }
+  #opinionBox .kind { color: var(--muted); }
+  #opinionBox .opt { font-size: 17px; font-weight: 600; color: #5b564d; margin: 4px 0 4px; }
+  #opinionBox .opb { font-size: 16px; line-height: 1.65; color: #5b564d; }
+  #cardB { display: flex; flex-direction: column; }
+  #structView { display: flex; flex-direction: column; flex: 1 1 0; min-height: 0; }
+  #structRows { position: relative; flex: 1 1 0; min-height: 60px; margin-top: 10px; overflow: hidden; }
+  .srow { position: absolute; left: 0; right: 0; height: 30px; display: flex; align-items: center;
+    font-size: 16px; color: #8a8478; border-radius: 4px; padding: 0 8px; }
+  .srow .lab { width: 128px; white-space: nowrap; }
+  .srow .rng { flex: 1; }
+  .srow .bar { position: absolute; left: 0; bottom: 0; height: 2px; background: var(--red); opacity: .6; }
+  .srow.cur { color: var(--ink); background: rgba(61,90,128,.10); font-weight: 600; }
+  #cardB .snote { font-size: 13px; color: var(--muted); margin-top: 8px; }
+  /* 曲式模式（有 form 数据时）：大段一行、小段缩进；当前小段高亮，所属大段加深 */
+  #structRows.form .srow .lab { width: auto; flex: 1 1 auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #structRows.form .srow .rng { flex: none; font-size: 13px; margin-left: 10px; }
+  #structRows.form .srow.l1 { font-weight: 600; color: #8a8478; }
+  #structRows.form .srow.l2 { padding-left: 26px; font-size: 15px; }
+  #structRows.form .srow.curp { color: var(--ink); }
+
+  /* 固定谱头：声部的谱号、调号、拍号钉在谱面左缘，谱面从它下面滑过 */
+  #sticky { position: absolute; left: 0; top: 0; pointer-events: none; color: #000; transform-origin: 0 0; }
+  .card .meta { font-size: 14px; color: var(--muted); margin-top: 6px; }
+  .card .gloss { font-size: 14px; line-height: 1.6; color: var(--muted); border-top: 1px solid var(--rule);
+    padding-top: 10px; margin-top: 8px; }
+  .card .gloss b { color: #5b564d; font-weight: 600; }
+
+  /* ---------- 底部两级进度条：正片不显示（视频网站用章节代替），代码保留备用 ---------- */
+  #bars { display: none; position: absolute; left: 28px; top: 960px; width: 1864px; height: 104px; }
+  .row { position: absolute; left: 0; width: 1864px; display: flex; gap: 4px; }
+  #row1 { top: 0; height: 34px; }
+  #row2 { top: 46px; height: 46px; }
+  .seg { position: relative; height: 100%; background: #ebe5d8; border-radius: 4px; overflow: hidden; }
+  .seg .fill { position: absolute; left: 0; top: 0; bottom: 0; background: #c9d4e3; }
+  .seg.cur { background: #e2dccd; }
+  .seg .lab { position: absolute; left: 8px; top: 50%; transform: translateY(-50%); font-size: 14px;
+    color: #5b564d; white-space: nowrap; }
+  #row2 .seg .lab { font-size: 13px; left: 5px; }
+  .seg.cur .lab { color: var(--ink); font-weight: 700; }
+  .marker { position: absolute; top: -4px; width: 3px; background: var(--red); border-radius: 2px; }
+</style>
+</head>
+<body>
+<div id="top">
+  <div class="title"><b>马勒 · 第六交响曲</b><span class="sep"></span><span id="topTitle"><span class="zh" id="topZh"></span><span class="tr" id="topTr"></span><span class="it" id="topIt"></span></span></div>
+  <div class="demo" id="demoNote">演示片段 · 画面按谱面速度，未与录音对齐 · 无声 · 小节号按本谱</div>
+</div>
+
+<div id="names"></div>
+<div id="viewport">
+  <div id="scroller"></div>
+  <svg id="sticky"></svg>
+  <svg id="overlay"></svg>
+  <div id="playhead"></div>
+  <div id="mvtTitle">
+    <div class="kicker">下一乐章</div>
+    <div class="big" id="mvtBig"></div>
+    <div class="sub" id="mvtSub"></div>
+  </div>
+</div>
+
+<div id="cards">
+  <div class="card" id="cardA"><div id="cardInner">
+    <div class="kind">解析 · 第 0–8 小节</div>
+    <h2>开头：第一小提琴的旋律，弦乐伴奏</h2>
+    <p>乐章从一拍<b>弱起</b>开始（第 0 小节），第一小提琴以 pp 奏出旋律。</p>
+    <p>起初伴奏只有弦乐：大提琴是连续的八分音符<b>分解和弦</b>，中提琴奏时值较长的音，低音提琴只在个别小节奏一个低音。</p>
+    <p>第 4 小节起第二小提琴、单簧管和低音单簧管进入；第 6 小节长笛与第一小提琴奏同样的旋律。</p>
+    <div class="meta">焦点声部：第一小提琴、大提琴、长笛 1</div>
+    <div class="gloss"><b>弱起</b>：乐曲从不完整的小节开始，第一个重拍之前先有几个音。<br>
+      <b>分解和弦</b>：把和弦的几个音依次奏出，而不是同时奏。</div>
+  </div>
+    <!-- 个人听感：有作者的看法时，在解析卡底部分出一小块显示，版式弱于解析；平时不占位置 -->
+    <div id="opinionBox">
+      <div class="kind">个人听感</div>
+      <div class="opt" id="opTitle"></div>
+      <div class="opb" id="opBody"></div>
+    </div>
+  </div>
+  <!-- 小卡片：始终显示本乐章的段落结构（不被个人听感遮住） -->
+  <div class="card" id="cardB">
+    <div id="structView">
+      <div class="kind">本乐章段落 · 按排练记号</div>
+      <div id="structRows"></div>
+      <div class="snote">曲式标注尚未分析，暂按排练记号分段</div>
+    </div>
+  </div>
+</div>
+
+<div id="bars">
+  <div class="row" id="row1"></div>
+  <div class="row" id="row2"></div>
+</div>
+
+<!-- 数据文件：默认第二乐章演示（build/data.js）；可用 ?data=build_m4/data.js 换成别的乐章 -->
+<script>document.write('<script src="' + (new URLSearchParams(location.search).get("data") || "build/data.js") + '"><\/script>');</script>
+<script>
+"use strict";
+// ======================== 参数 ========================
+// 右栏宽度可由地址参数 side= 调（像素，默认 560）；谱面视口随之变窄。左边 150 是声部名栏，栏间 20、右边距 24
+const SIDE = Number(new URLSearchParams(location.search).get("side")) || 560;   // 用户 2026-11-08 选定 560
+const VW = 1920 - 24 - SIDE - 20 - 150, VH = 1012;
+(() => {
+  const css = document.createElement("style");
+  css.textContent = `#viewport, #overlay, #mvtTitle { width: ${VW}px; }
+    #cards { left: ${1920 - 24 - SIDE}px; width: ${SIDE}px; }  .card { width: ${SIDE}px; }`;
+  document.head.appendChild(css);
+})();         // 谱面视口尺寸（像素）
+const PX = 300;                      // 播放线在视口中的横坐标（固定不动）
+const RAMP = 0.5;                    // 声部淡入淡出时长（秒）
+const LEAD = 0.4;                    // 声部在音符进入视口之前多早完成淡入（秒）
+const HL_FADE = 0.12;                // 音符恢复（红→黑）的渐变时长（秒）
+const HL_IN0 = 0.03, HL_IN1 = 0.02;   // 变红的渐变：发声前 30 毫秒开始、发声后 20 毫秒全红（用户反映略有延迟后由 0.12 秒压缩）
+const GAP_BARS = 4;                  // 休止不超过 4 小节视为仍在场（与 analyze.py 一致）
+const BAR_SEC = 4 * 60 / 55;         // 本段 4/4 拍、♩=55，一小节的秒数（只用于换算 GAP）
+// 乐章间过渡总时长（秒）。2026-11-09 用户：标题不能与流入的谱面重叠。改为两段不重叠：
+// 先单独出标题（淡入 0.7 秒、停 1.8 秒、淡出 0.7 秒），空 0.2 秒，再用 T_ARR 秒让谱面连同谱号、调号、拍号流入。
+const T_TITLE_IN = 0.7, T_TITLE_HOLD = 1.8, T_TITLE_OUT = 0.7, T_GAP = 0.2, T_ARR = 3.6;
+const INTRO = T_TITLE_IN + T_TITLE_HOLD + T_TITLE_OUT + T_GAP + T_ARR;   // 7.0
+window.INTRO_SEC = INTRO;              // render_frames.py 读它，决定从哪一秒开始渲
+const GROUP_COLOR = { "木管": "#6a994e", "铜管": "#d08c2e", "打击乐": "#8a8478", "竖琴与键盘": "#9c6fb0", "弦乐": "#3d5a80" };
+
+// 全曲进度条：四个乐章的录音时长（秒，来自 manifest）
+const MOVEMENTS = [["第一乐章", 1436], ["第二乐章 Andante", 897], ["第三乐章 谐谑曲", 784], ["第四乐章 终曲", 1850]];
+
+const D = window.SCORE;
+const MV = D.movement;
+// 卡片焦点声部（序号）：目前只有第二乐章演示卡片：第一小提琴、大提琴、长笛 1
+let FOCUS = MV === 2 && !D.cards ? [38, 42, 1] : [];
+// 解析卡数据（build_score.py 从 cards/m<N>.json 读入）：有就由数据驱动，替换掉写死的演示卡
+const CARDS = D.cards || null;
+const cardInner = document.getElementById("cardInner");
+const focusIdx = names => D.parts.map((p, i) => names.some(n => (p.zh || "").startsWith(n)) ? i : -1).filter(i => i >= 0);
+const esc = x => x.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+let shownCard = null;
+function showCard(c) {
+  if (c === shownCard) return; shownCard = c;
+  if (!c) { cardInner.innerHTML = ""; FOCUS = []; return; }
+  cardInner.innerHTML = `<div class="tag">第 ${c.m0}–${c.m1} 小节</div><h2>${esc(c.title)}</h2>`
+    + c.paras.map(p => `<p data-t="${p.t}">${esc(p.text)}</p>`).join("")    + (c.gloss.length ? `<div class="gloss">${c.gloss.map(([a, b]) => `<b>${esc(a)}</b>：${esc(b)}`).join("<br>")}</div>` : "");
+  FOCUS = focusIdx(c.focus);
+}
+// 本乐章的段落（起始小节号 + 排练记号，来自 structure.json）与首末小节号
+const REH = D.rehearsal;
+const M_FIRST = D.firstMeasure, M_LAST = D.lastMeasure;
+document.getElementById("topZh").textContent = D.title[0]; document.getElementById("topTr").textContent = D.title[2] || ""; document.getElementById("topIt").textContent = D.title[1] || "";
+document.getElementById("mvtBig").textContent = D.title[0];
+document.getElementById("mvtSub").textContent = D.title[1];
+if (MV === 1) document.querySelector("#mvtTitle .kicker").style.visibility = "hidden";   // 第一乐章接在片头封面后面，不是"下一乐章"
+document.title = "马勒六 · " + D.title[0] + "演示片段";
+if (MV !== 2 && !D.cards) document.getElementById("cardA").style.visibility = "hidden";   // 解析卡内容只写了第二乐章
+// 地址参数（争议片段合集等用）：intro=0 不要乐章间过渡、谱面一开始就在原位；caption=… 在右栏顶部显示大字说明；
+// cards=0 不显示解析卡
+const QS = new URLSearchParams(location.search);
+const NO_INTRO = QS.get("intro") === "0";
+const CONT = QS.get("cont") === "1";          // 全片分段渲染：本段接在上一段后面（不是乐章开头）
+const FILM = QS.get("film") === "1";          // 全片：右上角不写"演示片段"
+if (QS.get("cards") === "0") document.getElementById("cardA").style.display = "none";
+if (QS.get("caption")) {
+  const c = document.createElement("div"); c.id = "caption"; c.textContent = QS.get("caption");
+  document.getElementById("cards").insertBefore(c, document.getElementById("cards").firstChild);
+}
+
+// ======================== 工具函数 ========================
+const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+const smooth = x => { x = clamp(x, 0, 1); return x * x * (3 - 2 * x); };
+const ramp = (t, t0, t1) => smooth((t - t0) / (t1 - t0));
+function interp(xs, ys, x) {          // 分段线性插值，两端按最后一段斜率外推
+  let i = 1;
+  while (i < xs.length - 1 && xs[i] < x) i++;
+  const x0 = xs[i - 1], x1 = xs[i], y0 = ys[i - 1], y1 = ys[i];
+  if (x1 === x0) return x <= x0 ? y0 : y1;   // 相邻锚点横坐标相同（锚点被强制不减时会出现）：避免 0/0 得到 NaN（2026-11-07）
+  return y0 + (y1 - y0) * (x - x0) / (x1 - x0);
+}
+
+// ======================== 初始化 ========================
+const scroller = document.getElementById("scroller");
+scroller.innerHTML = D.svg;
+const outer = scroller.querySelector("svg");
+const inner = outer.querySelector("svg.definition-scale");
+const vb = inner.viewBox.baseVal;
+const K = vb.width / outer.width.baseVal.value;      // 每像素对应多少 SVG 单位
+const U2P = u => u / K;
+// Verovio 把整页内容包在 <g class="page-margin" transform="translate(x, y)"> 里，算屏幕位置时要把这层偏移加上
+const PM = (() => {
+  const g = inner.querySelector("g.page-margin");
+  const m = ((g && g.getAttribute("transform")) || "").match(/translate\(\s*([-\d.]+)[\s,]+([-\d.]+)/);
+  return m ? [+m[1], +m[2]] : [0, 0];
+})();
+
+// 隐藏 Verovio 自带的声部名、括号、系统起始线、贯穿小节线（换成每个谱表自己的小节线）
+inner.querySelectorAll(".label, .labelAbbr, .grpSym, .barLine, .mNum").forEach(e => e.style.display = "none");
+inner.querySelectorAll("g.system > path").forEach(e => e.style.display = "none");
+// 排练记号（谱面上方框里的数字）不画（用户 2026-11-09）；数据仍保留，曲式与对齐照用
+inner.querySelectorAll("g.reh").forEach(e => e.style.display = "none");
+
+const measures = [...inner.querySelectorAll("g.measure")];
+const NP = D.parts.length;
+const staffEls = Array.from({ length: NP }, () => []);   // staffEls[i] = 第 i 声部在各小节的 <g class="staff">
+const staffTop = new Array(NP), staffBot = new Array(NP);
+
+function staffLines(g) {               // 读出谱表五线的 x1、x2、y（SVG 单位）
+  return [...g.children].filter(c => c.tagName === "path").map(p => {
+    const m = p.getAttribute("d").match(/M(\S+)\s+(\S+)\s+L(\S+)\s+(\S+)/);
+    return m ? { x1: +m[1], y: +m[2], x2: +m[3] } : null;
+  }).filter(Boolean);
+}
+
+const ctrlQueue = [];
+measures.forEach(m => {
+  const staves = [...m.children].filter(c => c.classList.contains("staff"));
+  staves.forEach((g, i) => {
+    staffEls[i].push(g);
+    const L = staffLines(g);
+    if (!L.length) return;
+    const top = Math.min(...L.map(l => l.y)), bot = Math.max(...L.map(l => l.y));
+    if (staffTop[i] === undefined) { staffTop[i] = top; staffBot[i] = bot; }
+    // 每个谱表自己画右侧小节线
+    const x = Math.max(...L.map(l => l.x2));
+    const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    p.setAttribute("d", `M${x} ${top} L${x} ${bot}`); p.setAttribute("stroke-width", "27"); p.setAttribute("stroke", "currentColor");
+    g.appendChild(p);
+  });
+  ctrlQueue.push([m, staves]);
+});
+
+// 力度、连线、文字等不在谱表里的元素：按 Verovio 记录的谱表号（或起点音符所在谱表）
+// 挪进对应谱表的 <g>，好让它们跟着谱表一起移动和淡入淡出。实在查不到的再按纵坐标就近归属。
+function staffOfNoteId(id) {
+  const n = id && inner.querySelector(`[id="${id}"]`);
+  const g = n && n.closest("g.staff");
+  if (!g) return null;
+  for (let i = 0; i < NP; i++) if (staffEls[i].includes(g)) return i;
+  return null;
+}
+const crossGliss = [];
+ctrlQueue.forEach(([m, staves]) => {
+  [...m.children].filter(c => !c.classList.contains("staff") && !c.classList.contains("barLine") && !c.classList.contains("mNum"))
+    .forEach(el => {
+      const info = D.ctrl[el.id];
+      let idx = info && info.staff ? info.staff - 1 : staffOfNoteId(info && info.startid);
+      if (idx === null || idx === undefined) {
+        let bb; try { bb = el.getBBox(); } catch (e) { return; }
+        if (!bb || (bb.width === 0 && bb.height === 0)) return;
+        const cy = bb.y + bb.height / 2; let bd = Infinity;
+        for (let i = 0; i < NP; i++) { const d = Math.abs(cy - (staffTop[i] + staffBot[i]) / 2); if (d < bd) { bd = d; idx = i; } }
+      }
+      staves[idx].appendChild(el);
+      // 跨两行谱表的滑奏线（竖琴常见）：两行会被分别上下挪动，线的另一头要跟着它所在的那一行走（2026-11-08，
+      // 用户发现终乐章第 685、725–730 小节竖琴的滑奏线搭到了打击乐的单线谱上）。记下两端，每帧重画
+      if (info && info.kind === "gliss") {
+        const sA = staffOfNoteId(info.startid), sB = staffOfNoteId(info.endid);
+        const path = el.querySelector("path");
+        const m_ = path && /M\s*([-\d.]+)[ ,]+([-\d.]+)\s*L\s*([-\d.]+)[ ,]+([-\d.]+)/.exec(path.getAttribute("d") || "");
+        if (m_ && sA !== null && sB !== null && sA !== sB)
+          crossGliss.push({ path, own: idx, sA, sB, x1: +m_[1], y1: +m_[2], x2: +m_[3], y2: +m_[4] });
+      }
+    });
+});
+
+// 渐强、渐弱线贴回本谱表（2026-11-09，用户截图：长渐强压在下一行谱表上、与延音线重叠）：
+// Verovio 为躲避碰撞把它们排得很低（谱表顶线以下 1300–2000 单位，谱表本身只有 720），原排版里各谱表间距大，没事；
+// 播放页把谱表行距压紧后，这些线就落到了下面那一行谱表上。离谱表太远的挪到力度字母那一层（谱表下方约 0.2 个谱表高）。
+inner.querySelectorAll("g.staff g.hairpin").forEach(h => {
+  const st = h.closest("g.staff"); const L = staffLines(st); if (!L.length) return;
+  const top = Math.min(...L.map(l => l.y)), bot = Math.max(...L.map(l => l.y)), H = bot - top;
+  let b; try { b = h.getBBox(); } catch (e) { return; }
+  let dy = 0;
+  if (b.y > bot + 0.6 * H) dy = bot + 0.45 * H - b.y;                      // 太靠下（行距 2.8 个谱表高，挪后仍离下一行很远）
+  else if (b.y + b.height < top - 0.6 * H) dy = top - 0.2 * H - (b.y + b.height);   // 太靠上
+  if (dy) h.setAttribute("transform", `translate(0 ${dy.toFixed(0)})`);
+});
+
+// 音符：id → 元素、所属声部、横坐标、起止时间
+const notes = new Map();
+staffEls.forEach((list, i) => list.forEach(g => g.querySelectorAll("g.note").forEach(n => {
+  const head = n.querySelector(".notehead") || n;
+  notes.set(n.id, { el: n, staff: i, x: head.getBBox().x, on: null, off: null });
+})));
+const anchorT = [], anchorX = [];
+D.timemap.forEach(ev => {
+  const t = ev.tstamp / 1000;
+  (ev.on || []).forEach(id => { const n = notes.get(id); if (n) n.on = t; });
+  (ev.off || []).forEach(id => { const n = notes.get(id); if (n && n.off === null) n.off = t; });
+  // 取不到正常横坐标的音符（getBBox 返回 -33554430 之类的哨兵值，谐谑曲尾声的合并行里有）不作锚点
+  const xs = (ev.on || []).map(id => notes.get(id)).filter(Boolean).map(n => n.x).filter(x => Number.isFinite(x) && x > -1e6 && x < 1e8);
+  if (xs.length) { anchorT.push(t); anchorX.push(Math.min(...xs)); }
+});
+// 锚点按时间排序，横坐标强制单调递增
+const order = anchorT.map((t, i) => i).sort((a, b) => anchorT[a] - anchorT[b]);
+// 锚点按时间排序后，只保留横坐标不减的最长子序列（2026-11-08）：以前是把横坐标强制取"到目前为止的最大值"，
+// 一旦开头有个位置异常靠右的音符（谐谑曲第 401 小节起的片段就有），后面所有锚点都被拉到同一位置，谱面整段卡住不动
+const AT = [], AX = [];
+{
+  const ts = [], xs = [];
+  order.forEach(i => {
+    if (ts.length && Math.abs(ts[ts.length - 1] - anchorT[i]) < 1e-6) { xs[xs.length - 1] = Math.min(xs[xs.length - 1], anchorX[i]); return; }
+    ts.push(anchorT[i]); xs.push(anchorX[i]);
+  });
+  const tail = [], tailIdx = [], prev = new Array(xs.length).fill(-1);
+  xs.forEach((x, i) => {
+    let lo = 0, hi = tail.length;
+    while (lo < hi) { const m = (lo + hi) >> 1; if (tail[m] <= x) lo = m + 1; else hi = m; }
+    prev[i] = lo > 0 ? tailIdx[lo - 1] : -1;
+    tail[lo] = x; tailIdx[lo] = i;
+  });
+  const keep = []; for (let i = tailIdx[tail.length - 1]; i >= 0; i = prev[i]) keep.push(i);
+  keep.reverse().forEach(i => { AT.push(ts[i]); AX.push(xs[i]); });
+  if (keep.length < ts.length) console.log(`锚点：去掉 ${ts.length - keep.length} 个位置不一致的`);
+}
+// 滚动平滑（2026-11-08，用户：声部密集处有"卡"的感觉）：谱面在音符密集处排得宽、稀疏处排得窄，
+// 若严格让每个起音落在播放线上，滚动速度会随疏密忽快忽慢。这里把"时刻→横坐标"在 SMOOTH_SEC 的高斯窗里平滑
+// （正权重平滑保持单调），滚动匀顺，音符到达播放线的时刻最多偏差几十毫秒；变红仍按真实发声时刻。
+const SMOOTH_SEC = 0.25, SMOOTH_DT = 1 / 60;
+const ST = [], SX = [];
+{
+  const t0 = AT[0] - 2, t1 = AT[AT.length - 1] + 2, raw = [];
+  for (let t = t0; t <= t1; t += SMOOTH_DT) { ST.push(t); raw.push(interp(AT, AX, t)); }
+  const sig = SMOOTH_SEC / SMOOTH_DT, R_ = Math.ceil(3 * sig), w = [];
+  for (let k = -R_; k <= R_; k++) w.push(Math.exp(-0.5 * (k / sig) ** 2));
+  for (let i = 0; i < raw.length; i++) {
+    let a = 0, ws = 0;
+    for (let k = -R_; k <= R_; k++) { const j = i + k; if (j < 0 || j >= raw.length) continue; a += w[k + R_] * raw[j]; ws += w[k + R_]; }
+    SX.push(Math.max(a / ws, SX.length ? SX[SX.length - 1] + 1e-6 : -Infinity));
+  }
+}
+const xAt = t => interp(ST, SX, t);          // 时刻 → 谱面横坐标（SVG 单位，已平滑）
+const tAt = x => interp(SX, ST, x);          // 谱面横坐标 → 时刻
+// 延音线连着的后一个音符：时间表里可能没有单独的起止时刻。
+// 补上：播放线到达它时开始算发声，结束时刻同前一个音符。
+const tieInfo = [...inner.querySelectorAll("g.tie")].map(el => {
+  const c = D.ctrl[el.id] || {};
+  return { el, a: notes.get(c.startid), b: notes.get(c.endid) };
+}).filter(x => x.a && x.a.on !== null);
+tieInfo.forEach(({ a, b }) => {
+  if (b && b.on === null) { b.on = tAt(b.x); b.off = a.off !== null ? a.off : null; }
+});
+const noteList = [...notes.values()].filter(n => n.on !== null);
+noteList.forEach(n => { if (n.off === null || n.off <= n.on) n.off = n.on + 0.3; });
+
+// ---------- 染红 ----------
+const SVGNS = "http://www.w3.org/2000/svg";
+const INK = [29, 27, 24], RED = [209, 52, 43];
+const mix = k => `rgb(${INK.map((v, i) => Math.round(v + (RED[i] - v) * k)).join(",")})`;
+// 发声程度 0..1：起音前后约 0.12 秒渐变变红，结束后同样渐变恢复
+// 发声程度 0..1。变红要快：眼睛把"已经够红"的那一刻当作开始，渐变太长会显得慢半拍
+const level = (on, off, t) => Math.min(ramp(t, on - HL_IN0, on + HL_IN1), 1 - ramp(t, off, off + HL_FADE));
+function paint(el, k) {
+  // 记住上次的状态，没变就不碰 DOM（提速 2026-11-09）
+  const v = k > 0.002 ? mix(k) : "";
+  if (el._hc === v) return;
+  el._hc = v;
+  if (v) { el.classList.add("hl"); el.style.setProperty("--hc", v); }
+  else el.classList.remove("hl");
+}
+// 和弦的符干、符尾、附点挂在和弦上而不在单个音符里，单独处理
+const chordParts = [...inner.querySelectorAll("g.chord")].map(c => ({
+  parts: [...c.children].filter(x => !x.classList.contains("note")),
+  ns: [...c.querySelectorAll("g.note")].map(n => notes.get(n.id)).filter(n => n && n.on !== null),
+})).filter(c => c.ns.length);
+
+// 符杠、延音线：复制一份红色的，用裁剪矩形只露出播放线已经扫过的部分
+const defs = inner.querySelector("defs") || inner.insertBefore(document.createElementNS(SVGNS, "defs"), inner.firstChild);
+const sweeps = [];
+function addSweep(owner, shapes, tOn, tOff) {
+  if (!shapes.length || !(tOff > tOn)) return;
+  const xs = shapes.map(s => { const b = s.getBBox(); return [b.x, b.x + b.width]; });
+  const x0 = Math.min(...xs.map(v => v[0])), x1 = Math.max(...xs.map(v => v[1]));
+  const id = "sweep" + sweeps.length;
+  const cp = document.createElementNS(SVGNS, "clipPath");
+  cp.setAttribute("id", id); cp.setAttribute("clipPathUnits", "userSpaceOnUse");
+  const r = document.createElementNS(SVGNS, "rect");
+  r.setAttribute("x", x0); r.setAttribute("y", -1e6); r.setAttribute("height", 2e6); r.setAttribute("width", 0);
+  cp.appendChild(r); defs.appendChild(cp);
+  const g = document.createElementNS(SVGNS, "g");
+  g.setAttribute("class", "sweep"); g.setAttribute("clip-path", `url(#${id})`); g.style.display = "none";
+  shapes.forEach(s => g.appendChild(s.cloneNode(true)));
+  owner.appendChild(g);
+  sweeps.push({ g, r, x0, x1, tOn, tOff });
+}
+inner.querySelectorAll("g.beam").forEach(bm => {
+  const ns = [...bm.querySelectorAll("g.note")].map(n => notes.get(n.id)).filter(n => n && n.on !== null);
+  if (!ns.length) return;
+  const polys = [...bm.children].filter(c => c.tagName === "polygon");
+  addSweep(bm, polys, Math.min(...ns.map(n => n.on)), Math.max(...ns.map(n => n.off)));
+});
+tieInfo.forEach(({ el, a, b }) => {
+  const tOff = Math.max(a.off, b && b.off !== null ? b.off : 0);
+  addSweep(el, [...el.children].filter(c => c.tagName === "path"), a.on, tOff);
+});
+// 两音颤音（fTrem，两个音之间快速来回）的横杠：和符杠一样，播放线扫过的部分标红
+inner.querySelectorAll("g.fTrem").forEach(ft => {
+  const ns = [...ft.querySelectorAll("g.note")].map(n => notes.get(n.id)).filter(n => n && n.on !== null);
+  if (!ns.length) return;
+  const polys = [...ft.children].filter(c => c.tagName === "polygon" || c.tagName === "rect");
+  addSweep(ft, polys, Math.min(...ns.map(n => n.on)), Math.max(...ns.map(n => n.off)));
+});
+// 单音颤音（bTrem）的符干斜杠挂在颤音组上而不在音符里：随组内音符一起变红（与和弦符干同样处理）
+inner.querySelectorAll("g.bTrem").forEach(bt => {
+  const ns = [...bt.querySelectorAll("g.note")].map(n => notes.get(n.id)).filter(n => n && n.on !== null);
+  const parts = [...bt.children].filter(x => !x.classList.contains("note") && !x.classList.contains("chord"));
+  if (ns.length && parts.length) chordParts.push({ parts, ns });
+});
+
+// ---------- 声部在场区间 ----------
+// 把每个声部的音符按"休止不超过 GAP_BARS 小节"合并成段；
+// 段的第一个音符进入视口右缘之前 LEAD 秒完成淡入，最后一个音符离开视口左缘后淡出。
+const segs = Array.from({ length: NP }, () => []);
+for (let i = 0; i < NP; i++) {
+  const ns = noteList.filter(n => n.staff === i).sort((a, b) => a.on - b.on);
+  let cur = null;
+  ns.forEach(n => {
+    if (cur && n.on - cur.lastOff <= GAP_BARS * BAR_SEC) { cur.lastOff = Math.max(cur.lastOff, n.off); cur.lastX = Math.max(cur.lastX, n.x); }
+    else { cur = { firstX: n.x, lastX: n.x, lastOff: n.off }; segs[i].push(cur); }
+  });
+  segs[i].forEach(s => {
+    s.tIn = tAt(s.firstX - (VW - PX) * K) - LEAD;     // 淡入完成的时刻
+    s.tOut = tAt(s.lastX + PX * K);                    // 开始淡出的时刻
+    s.tFirst = tAt(s.firstX);                          // 段内第一个音符发声的时刻
+    s.rampIn = s.rampOut = RAMP;                       // 淡入淡出时长，后面按音乐激烈程度调整
+  });
+}
+function weight(i, t) {                // 声部 i 在时刻 t 的显示权重 0..1
+  if (D.parts[i].hide) return 0;       // labels.json 判为空谱表的行，始终不显示
+  let w = 0;
+  segs[i].forEach(s => { w = Math.max(w, Math.min(ramp(t, s.tIn - s.rampIn, s.tIn), 1 - ramp(t, s.tOut, s.tOut + s.rampOut))); });
+  return w;
+}
+
+// ---------- 进出场成组、按激烈程度调整快慢 ----------
+// 1) 一小节之内先后进场的声部一起进场（都提前到其中最早的那个），一小节之内先后退场的一起退场
+//    （都推迟到最晚的那个）。只并近的，不会把整段的进出都并成一次。
+// 2) 过渡快慢看两样（用户 2026-11-07）：
+//    - 强度：该时刻前后 2 秒内的起音密度（每秒多少个新起音），越密越快。对齐录音后可改用录音响度。
+//    - 速度：当时一拍（四分音符）多长，拍子越快过渡越快。时间轴换成录音时间后，这里自动变成演奏的实际速度。
+//    合起来淡入淡出在 0.18–0.7 秒之间。
+const onsetTimes = [...new Set(D.timemap.filter(e => (e.on || []).length).map(e => e.tstamp / 1000))].sort((a, b) => a - b);
+function onsetRate(t) {
+  let lo = 0, hi = onsetTimes.length;
+  while (lo < hi) { const m = (lo + hi) >> 1; if (onsetTimes[m] < t - 2) lo = m + 1; else hi = m; }
+  let n = 0; for (let k = lo; k < onsetTimes.length && onsetTimes[k] <= t + 2; k++) n++;
+  return n / 4;
+}
+// 四分音符时值（秒）：由时间表里相邻事件的 qstamp（四分音符数）和 tstamp（毫秒）求斜率
+const qEv = D.timemap.filter(e => typeof e.qstamp === "number").map(e => [e.tstamp / 1000, e.qstamp]);
+function beatSec(t) {
+  let k = 0; while (k + 1 < qEv.length && qEv[k + 1][0] <= t) k++;
+  const a = qEv[Math.max(0, k - 2)], b = qEv[Math.min(qEv.length - 1, k + 3)];
+  return b[1] > a[1] ? (b[0] - a[0]) / (b[1] - a[1]) : 1;
+}
+const rampFor = t => clamp(0.7 / (1 + onsetRate(t) / 4) * clamp(Math.sqrt(beatSec(t) / 0.8), 0.6, 1.3), 0.18, 0.7);
+function barLenAt(t) {                 // 时刻 t 所在小节的长度（秒）
+  let k = 0; while (k + 1 < measStarts.length && measStarts[k + 1] <= t) k++;
+  return k + 1 < measStarts.length ? measStarts[k + 1] - measStarts[k] : BAR_SEC;
+}
+function groupTransitions() {
+  const all = segs.flatMap((ss, i) => D.parts[i].hide ? [] : ss);
+  const ins = [...all].sort((a, b) => a.tIn - b.tIn);
+  for (let k = 0; k < ins.length;) {                     // 进场：并到组内最早
+    const t0 = ins[k].tIn, win = barLenAt(Math.max(t0, 0));
+    let j = k + 1; while (j < ins.length && ins[j].tIn - t0 <= win) j++;   // 至少前进一格：时刻是 NaN 时比较恒为假，曾导致死循环（2026-11-07）
+    for (let q = k; q < j; q++) ins[q].tIn = t0;
+    k = j;
+  }
+  const outs = [...all].sort((a, b) => a.tOut - b.tOut);
+  for (let k = 0; k < outs.length;) {                    // 退场：并到组内最晚
+    const t0 = outs[k].tOut, win = barLenAt(Math.max(t0, 0));
+    let j = k + 1; while (j < outs.length && outs[j].tOut - t0 <= win) j++;
+    const tl = Math.max(...outs.slice(k, j).map(s => s.tOut));
+    for (let q = k; q < j; q++) outs[q].tOut = tl;
+    k = j;
+  }
+  all.forEach(s => { s.rampIn = rampFor(Math.max(s.tFirst, s.tIn)); s.rampOut = rampFor(s.tOut); });
+}
+
+// ---------- 显示行 ----------
+// 一般一个声部一行；labels.json 里 merge 的声部（如低音单簧管换调的两条谱表）与目标共用一行。
+const ROW_OF = D.parts.map(p => p.row);
+const ROWS = [...new Set(ROW_OF)];                        // 按出现顺序排列的行
+const MEMBERS = ROWS.map(r => ROW_OF.map((x, i) => x === r ? i : -1).filter(i => i >= 0));
+
+// ---------- 纵向排布 ----------
+const origH = U2P(staffBot[0] - staffTop[0]);                       // 五线谱高度（像素）
+// 原排版里相邻谱表的间距。Verovio 的纵向间距随所排小节里的高低音而变；全片分段渲染时各段不同，
+// 会让缩放倍数在接缝处跳变（2026-11-09 实测 2.70 与 3.01 倍谱表高度），所以全片模式固定为 2.8 倍谱表高度
+const origSlot = FILM ? origH * 2.8 : U2P((staffTop[NP - 1] - staffTop[0]) / (NP - 1));
+const SLOT_MIN = origSlot * 0.95, SLOT_MAX = origSlot * 1.45;
+const Z_MIN = 0.45;                    // 全奏时谱面整体缩小的下限
+// 纵向排布。行多到放不下时，不把谱面切成两半，而是整体等比缩小（谱表大小和间距一起缩，像镜头拉远），
+// 缩放倍数 z 随在场行数平滑变化；行少了再平滑放大回原尺寸。返回的 centers/rowCenter 是屏幕坐标。
+// 打击乐的单线谱（大鼓、小军鼓等）只有一条线，行高压到普通行的 ROW_1LINE 倍
+const ROW_1LINE = 0.5;
+const ROW_F = MEMBERS.map(ms => staffLines(staffEls[ms[0]][0]).length <= 1 ? ROW_1LINE : 1);
+function layout(t) {
+  const w = Array.from({ length: NP }, (_, i) => weight(i, t));
+  const rw = MEMBERS.map(ms => Math.max(...ms.map(i => w[i])));      // 行权重 = 行内声部的最大权重
+  const rh = rw.map((wi, k) => wi * ROW_F[k]);                        // 行实际占用的高度（以普通行为 1）
+  const total = rh.reduce((a, b) => a + b, 0);
+  const avail = VH - 40;
+  const z = total * SLOT_MIN > avail ? Math.max(Z_MIN, avail / (total * SLOT_MIN)) : 1;
+  const slot = z < 1 ? SLOT_MIN * z : clamp(avail / Math.max(total, 1e-6), SLOT_MIN, SLOT_MAX);
+  let y = (VH - slot * total) / 2;
+  const rowCenter = rh.map(hi => { const c = y + slot * hi / 2; y += slot * hi; return c; });
+  const centers = new Array(NP);
+  MEMBERS.forEach((ms, r) => ms.forEach(i => { centers[i] = rowCenter[r]; }));
+  return { w, rw, centers, rowCenter, z };
+}
+
+// ---------- 小节位置 ----------
+// 时间表里每个小节的开始时刻和谱面小节号（Verovio 的 @n），用于算"现在在第几小节"
+const measEv = D.timemap.filter(e => e.measureOn);
+const measStarts = measEv.map(e => e.tstamp / 1000);
+const measNums = measEv.map((e, k) => { const n = D.measureN[e.measureOn]; return n === null || n === undefined ? M_FIRST + k : n; });
+function measurePos(t) {               // 带小数的谱面小节号（如 4.5 = 第 4 小节过半）
+  if (t <= 0 && !CONT) return measNums[0];      // 分段渲染的后续段：t=0 是乐曲中间，照常查找
+  let k = 0; while (k + 1 < measStarts.length && measStarts[k + 1] <= t) k++;
+  const a = measStarts[k], b = k + 1 < measStarts.length ? measStarts[k + 1] : a + BAR_SEC;
+  return measNums[k] + clamp((t - a) / (b - a), 0, 1);
+}
+
+// ---------- 当前在奏的乐手编号 ----------
+// 共用行（几位乐手共用一行谱表）的显示名不带编号，编号取自谱面上的乐手标记（build_score.py 已解析）：
+// 取当前小节或之前最近一个写了编号的小节，把那一小节里的编号合起来显示，如"1·2·3 号"。
+function playersAt(i, mnum) {
+  const marks = D.parts[i].marks || [];
+  let lastM = null;
+  for (const mk of marks) { if (mk.m > mnum) break; if (mk.players.length) lastM = mk.m; }
+  if (lastM === null) return "";
+  const at = marks.filter(mk => mk.m === lastM && mk.players.length);
+  const ps = [...new Set(at.flatMap(mk => mk.players))].sort((a, b) => a - b);
+  return ps.join("·") + " 号" + (at.some(mk => mk.solo) ? " 独奏" : "");
+}
+
+// ---------- 声部名栏：每行一个名字 ----------
+const namesBox = document.getElementById("names");
+const nameEls = ROWS.map((r, k) => {
+  const p = D.parts[MEMBERS[k][0]];
+  const d = document.createElement("div");
+  d.className = "pname";
+  d.innerHTML = `<span class="dot" style="background:${GROUP_COLOR[p.group] || "#999"}"></span>${p.zh}<span class="pl"></span>`;
+  namesBox.appendChild(d); return d;
+});
+const nameOfPart = i => nameEls[ROWS.indexOf(ROW_OF[i])];
+
+// ---------- 进度条 ----------
+const row1 = document.getElementById("row1"), row2 = document.getElementById("row2");
+const mv = MOVEMENTS.map(([name, dur], k) => {
+  const s = document.createElement("div"); s.className = "seg" + (k === MV - 1 ? " cur" : "");
+  s.style.flex = `${dur} 0 0`; s.innerHTML = `<div class="fill"></div><div class="lab">${name}</div>`;
+  row1.appendChild(s); return s;
+});
+const rh = REH.map(([m0, lab], k) => {
+  const m1 = k + 1 < REH.length ? REH[k + 1][0] : M_LAST + 1;
+  const s = document.createElement("div"); s.className = "seg";
+  s.style.flex = `${m1 - m0} 0 0`; s.innerHTML = `<div class="fill"></div><div class="lab">${lab}</div>`;
+  row2.appendChild(s); return { el: s, m0, m1 };
+});
+// 段太窄、放不下标签文字时不显示标签（终乐章有 64 个排练记号）
+rh.forEach(({ el }) => { const lab = el.querySelector(".lab"); if (lab.scrollWidth + 8 > el.clientWidth) lab.style.visibility = "hidden"; });
+
+// ---------- 全奏缩放：修正声部的进场时刻 ----------
+// 谱面缩小时视口右缘能看到更远的谱面，声部要相应更早进场。用第一遍算出的缩放倍数修正一次。
+{
+  const fix = [];
+  for (let i = 0; i < NP; i++) segs[i].forEach(s => {
+    const z = layout(s.tIn).z;
+    if (z < 0.999) fix.push([s, tAt(s.firstX - (VW - PX) * K / z) - LEAD]);
+  });
+  fix.forEach(([s, v]) => { s.tIn = Math.min(s.tIn, v); });
+}
+groupTransitions();
+
+// ---------- 乐章间过渡：谱面从右侧流入 ----------
+// 不另画假谱线：过渡就是谱面滚动往前延伸几秒。整份谱面（含谱号、调号、拍号）从视口右缘外流入，
+// 平滑减速，t=0 时速度正好等于正常滚动速度、第一个音符正好到达播放线；谱号随后继续左移，
+// 到左缘时由固定谱头接住（即"到了应有的位置停下来"）。
+const mvtTitle = document.getElementById("mvtTitle");
+const L0 = layout(0);
+const openIdx = L0.w.map((w, i) => w > 0.99 ? i : -1).filter(i => i >= 0);
+const SYS_X1 = staffLines(staffEls[0][0])[0].x1;          // 谱线起点（SVG 单位，本地坐标）
+const v0 = L0.z * U2P(xAt(0.2) - xAt(0)) / 0.2;            // t=0 时的正常滚动速度（像素/秒）
+const sysLeftBase = (t, z) => PX - z * U2P(xAt(Math.max(t, 0)) - SYS_X1);   // 不含流入偏移的谱线起点位置
+const ARR_DIST = VW + 30 - sysLeftBase(0, L0.z);           // 流入前谱面整体在右缘外多远
+function arriveOffset(t) {             // 流入阶段额外的向右偏移（像素），t>=0 时为 0
+  if (t >= 0 || NO_INTRO) return 0;
+  if (t <= -T_ARR) return ARR_DIST;
+  const u = (t + T_ARR) / T_ARR, D = ARR_DIST;
+  const d1 = -v0 * T_ARR, d0 = -Math.min(1.5 * D, 3 * D + d1);   // 两端斜率，保证单调、末端与正常速度衔接
+  const h00 = 2 * u ** 3 - 3 * u ** 2 + 1, h10 = u ** 3 - 2 * u ** 2 + u, h11 = u ** 3 - u ** 2;
+  return h00 * D + h10 * d0 + h11 * d1;
+}
+const sysLeft = (t, z) => sysLeftBase(t, z) + arriveOffset(t);
+// 屏幕上谱表中心 = (本地中心 + 页边距偏移 + 平移量) × 缩放；layout() 给出的 centers 就是想要的屏幕中心
+const dyUnits = (i, c, z) => (c / z - U2P(PM[1] + (staffTop[i] + staffBot[i]) / 2)) * K;
+
+// ---------- 固定谱头 ----------
+// 把每个声部开头的谱号、调号、拍号复制一份，放在视口左缘。谱面开头滑到左缘时它接上，
+// 之后谱面从它下面滑过；后来才进入的声部，一出现前面就有谱号、调号、拍号。
+// 注：演示片段里没有换谱号、转调、换拍号，所以只用开头这一套。全曲版要按时刻取当时生效的那一套。
+const sticky = document.getElementById("sticky");
+const HDR_PAD = 10;                                         // 谱头左侧留白（像素）
+let hdrRight = SYS_X1;
+staffEls.forEach(list => [...list[0].children]
+  .filter(c => /\b(clef|keySig)\b/.test(c.getAttribute("class") || "")   /* 谱头不放拍号（用户 2026-11-09），拍号在谱面里变化处显示 */)
+  .forEach(c => { const b = c.getBBox(); hdrRight = Math.max(hdrRight, b.x + b.width); }));
+const HDR_W = Math.ceil(HDR_PAD + U2P(hdrRight - SYS_X1) + 14);     // 谱头宽度（像素）
+// 谱头画布的高度按最小缩放倍数留足：全奏缩小时谱头整体 scale(z)，画布若只有 VH 高，最下面几行会被裁掉
+const HDR_H = Math.ceil(VH / Z_MIN);
+sticky.setAttribute("width", HDR_W + 16); sticky.setAttribute("height", HDR_H);
+sticky.setAttribute("viewBox", `0 0 ${(HDR_W + 16) * K} ${HDR_H * K}`);
+sticky.innerHTML = `<defs><linearGradient id="hdrFade" x1="0" x2="1">
+  <stop offset="0" stop-color="#faf8f3" stop-opacity="1"/><stop offset="1" stop-color="#faf8f3" stop-opacity="0"/></linearGradient></defs>
+  <rect x="0" y="0" width="${HDR_W * K}" height="${HDR_H * K}" fill="#faf8f3"/>
+  <rect x="${HDR_W * K}" y="0" width="${16 * K}" height="${HDR_H * K}" fill="url(#hdrFade)"/>`;
+const hdrRoot = document.createElementNS(SVGNS, "g");
+hdrRoot.setAttribute("transform", `translate(${HDR_PAD * K - SYS_X1 - PM[0]} 0)`);
+sticky.appendChild(hdrRoot);
+const hdrStaff = staffEls.map((list, i) => {
+  const outerG = document.createElementNS(SVGNS, "g");          // 负责纵向位置
+  const g = document.createElementNS(SVGNS, "g");               // 内容，带页边距偏移
+  g.setAttribute("transform", `translate(${PM[0]} ${PM[1]})`);
+  staffLines(list[0]).forEach(l => {
+    const p = document.createElementNS(SVGNS, "path");
+    p.setAttribute("d", `M${SYS_X1} ${l.y} L${hdrRight + 14 * K} ${l.y}`);
+    p.setAttribute("stroke", "currentColor"); p.setAttribute("stroke-width", "13");
+    g.appendChild(p);
+  });
+  [...list[0].children].filter(c => /\b(clef|keySig)\b/.test(c.getAttribute("class") || "")   /* 谱头不放拍号（用户 2026-11-09），拍号在谱面里变化处显示 */)
+    .forEach(c => g.appendChild(c.cloneNode(true)));
+  outerG.appendChild(g); hdrRoot.appendChild(outerG);
+  return outerG;
+});
+
+// 换谱号：同一声部后面出现的谱号（如大提琴从中音谱号换到低音谱号）。谱面滑过谱头之后，谱头里的谱号跟着换。
+// 只换谱号图形和它的纵向位置（Verovio 里谱号字形的原点就在所在的线上），横向位置和大小沿用谱头里原来那个。
+const clefSeq = staffEls.map(list => {
+  const seq = [];
+  list.forEach(g => g.querySelectorAll(".clef use").forEach(u => {
+    const m = /translate\(\s*([-\d.]+)[ ,]+([-\d.]+)\)/.exec(u.getAttribute("transform") || "");
+    if (m) seq.push({ x: +m[1], y: +m[2], href: u.getAttribute("xlink:href") || u.getAttribute("href") });
+  }));
+  return seq.sort((a, b) => a.x - b.x);
+});
+const hdrClefUse = hdrStaff.map(og => og.querySelector(".clef use"));
+const hdrClefBase = hdrClefUse.map(u => {
+  if (!u) return null;
+  const tr = u.getAttribute("transform") || "";
+  const m = /translate\(\s*([-\d.]+)[ ,]+([-\d.]+)\)\s*(scale\([^)]*\))?/.exec(tr);
+  return m ? { x: +m[1], scale: m[3] || "" } : null;
+});
+const hdrClefCur = clefSeq.map(() => 0);
+// 谱中途换谱号用的是缩小的"换谱号"字形（SMuFL E07A–E07C）；谱头里换成正常大小的（E050 高音、E05C 中音、E062 低音），
+// 前提是这份 SVG 的字形库里有；没有就沿用缩小的字形
+const CLEF_FULL = { E07A: "E050", E07B: "E05C", E07C: "E062" };
+function fullClef(href) {
+  const code = href.slice(1, 5), full = CLEF_FULL[code];
+  if (!full) return href;
+  const el = document.querySelector(`[id^="${full}-"]`);
+  return el ? "#" + el.id : href;
+}
+function updateHeaderClefs(xEdge) {
+  clefSeq.forEach((seq, i) => {
+    if (!hdrClefUse[i] || !hdrClefBase[i] || seq.length < 2) return;
+    let k = 0; while (k + 1 < seq.length && seq[k + 1].x <= xEdge) k++;
+    if (k === hdrClefCur[i]) return;
+    hdrClefCur[i] = k;
+    const href = fullClef(seq[k].href);
+    hdrClefUse[i].setAttribute("xlink:href", href);
+    hdrClefUse[i].setAttribute("href", href);
+    hdrClefUse[i].setAttribute("transform", `translate(${hdrClefBase[i].x}, ${seq[k].y}) ${hdrClefBase[i].scale}`);
+  });
+}
+
+// 渐强、渐弱线：社区谱里有些没有写终点，Verovio 就一直画到整行谱的末尾，横穿好几页，看上去像多出来的谱线
+// （用户 2026-11-08 截图）。原来超过 2.5 个小节宽的不画；用户 2026-11-10 改为：比一小节长的都不画
+// （长渐强渐弱太容易和很长的延音线叠在一起，必要时在解析卡里讲）。"一小节"取它所在小节的宽度，全小节都很窄时退回中位小节宽。
+{
+  const mw = [...inner.querySelectorAll("g.measure")].map(m => m.getBBox().width).filter(w => w > 0).sort((a, b) => a - b);
+  const med = mw.length ? mw[mw.length >> 1] : 1e9;
+  let n = 0;
+  inner.querySelectorAll("g.hairpin").forEach(h => {
+    // 小节的 bbox 含它自己的渐强线，不能用；取该小节第一条谱表五线的长度
+    const m = h.closest("g.measure"), st = m && m.querySelector("g.staff"), L = st ? staffLines(st) : [];
+    let w = L.length ? Math.max(...L.map(l => l.x2)) - Math.min(...L.map(l => l.x1)) : med;
+    if (!(w > 0.3 * med)) w = med;
+    if (h.getBBox().width > 1.02 * w) { h.style.display = "none"; n++; }
+  });
+  if (n) console.log(`隐藏了 ${n} 条过长的渐强、渐弱线`);
+}
+
+// ---------- 动机标记 ----------
+// motifs.json 里本乐章的出现：在指定声部、指定小节的谱表下面画半透明底色带（颜色避开红色），
+// 并在其中最上面一行的上方写标签。底色带放进谱表自己的 <g>，所以会跟着谱表移动、淡入淡出、缩放。
+(D.motifs || []).forEach(mo => {
+  let labelDone = false;
+  const top = Math.min(...mo.spans.map(s => s.part));
+  measures.forEach((m, k) => {
+    const mn = D.measureN[m.id];
+    mo.spans.forEach(sp => {
+      if (mn === null || mn === undefined || mn < sp.from || mn > sp.to) return;
+      const g = staffEls[sp.part][k];
+      const L = staffLines(g); if (!L.length) return;
+      const x1 = Math.min(...L.map(l => l.x1)), x2 = Math.max(...L.map(l => l.x2));
+      const y1 = Math.min(...L.map(l => l.y)), y2 = Math.max(...L.map(l => l.y));
+      const pad = (y2 - y1) * 0.45;
+      const r = document.createElementNS(SVGNS, "rect");
+      r.setAttribute("x", x1); r.setAttribute("y", y1 - pad); r.setAttribute("width", x2 - x1);
+      r.setAttribute("height", y2 - y1 + 2 * pad); r.setAttribute("rx", pad * 0.6);
+      r.setAttribute("fill", mo.color); r.setAttribute("fill-opacity", "0.22");
+      r.setAttribute("class", "motifBand");
+      g.insertBefore(r, g.firstChild);                         // 放在音符下面
+      if (!labelDone && sp.part === top) {
+        const tx = document.createElementNS(SVGNS, "text");
+        tx.setAttribute("x", x1 + 60); tx.setAttribute("y", y1 - pad - 120);
+        tx.setAttribute("font-size", "440"); tx.setAttribute("font-family", "Microsoft YaHei, sans-serif");
+        tx.setAttribute("fill", "#7a5e00"); tx.setAttribute("font-weight", "600");
+        tx.textContent = mo.label;
+        g.appendChild(tx); labelDone = true;
+      }
+    });
+  });
+});
+
+// ---------- 小卡片 ----------
+// 作者的个人听感，格式 {t0, t1, title, body}（秒），出现时显示在解析卡底部。目前还没有。
+// 地址里加 &opdemo=1 时放一条占位文字，只用来检查版式，不进成片。
+const OPINIONS = new URLSearchParams(location.search).get("opdemo")
+  ? [{ t0: 2.5, t1: 60, title: "（版式演示占位）", body: "这里将显示作者本人的一两句听感，出现时在解析卡底部分出一小块，段落结构卡照常显示。" }]
+  : [];
+const SROW_H = 30, SROWS = 7;
+const structRows = document.getElementById("structRows");
+// 有曲式数据（form/m<N>.json，build_score.py 写入 D.form）就按两级曲式显示，否则按排练记号
+const srows = [];
+function addSrow(lvl, label, m0, m1, parent) {
+  const d = document.createElement("div"); d.className = "srow" + (D.form ? " l" + lvl : "");
+  d.innerHTML = `<span class="lab">${label}</span><span class="rng">第 ${m0}–${m1} 小节</span><span class="bar"></span>`;
+  structRows.appendChild(d);
+  const r = { el: d, m0, m1: m1 + 1, lvl, parent, leaf: true };
+  srows.push(r); return r;
+}
+if (D.form) {
+  structRows.classList.add("form");
+  document.querySelector("#structView .kind").textContent = "本乐章曲式";
+  document.querySelector("#structView .snote").textContent = D.form.note || "";
+  D.form.sections.forEach(sec => {
+    const top = addSrow(1, sec.label, sec.from, sec.to, null);
+    if (sec.subs && sec.subs.length) { top.leaf = false; sec.subs.forEach(sb => addSrow(2, sb.label, sb.from, sb.to, top)); }
+  });
+} else {
+  REH.forEach(([m0, lab], k) => addSrow(1, k === 0 ? "开头" : "排练记号 " + lab, m0, k + 1 < REH.length ? REH[k + 1][0] - 1 : M_LAST, null));
+}
+
+// ======================== 每帧绘制 ========================
+// 画面延后量（毫秒）：听感上的起音（P-center）比物理起点晚，若红点测试觉得变红普遍抢拍，
+// 用地址参数 &delay=40 之类整体延后画面；默认 0。音频不动，只延后画面。
+const SYNC_DELAY = (Number(new URLSearchParams(location.search).get("delay")) || 0) / 1000;
+if (FILM) document.getElementById("demoNote").textContent = "小节号按本谱 · 乐谱来自社区 MusicXML，可能有个别错误";
+else if (D.audio) document.getElementById("demoNote").textContent =
+  "演示片段 · 对齐结果为草稿（未逐小节人工核对）" + (SYNC_DELAY ? ` · 画面延后 ${Math.round(SYNC_DELAY * 1000)} 毫秒` : "") + " · 小节号按本谱";
+
+const dyNow = new Array(NP).fill(0);
+let nameDX = 0;                                  // 乐章开头流入时声部名的横向偏移（像素）
+// 写属性、样式前先和上次写的值比较，相同就不写（提速；结果与每次都写完全一样）
+const _cache = new WeakMap();
+function _slot(el) { let m = _cache.get(el); if (!m) { m = {}; _cache.set(el, m); } return m; }
+function setA(el, a, v) { const m = _slot(el); if (m["a" + a] !== v) { m["a" + a] = v; el.setAttribute(a, v); } }
+function setS(el, p, v) { const m = _slot(el); if (m["s" + p] !== v) { m["s" + p] = v; el.style[p] = v; } }
+// 每个小节的横向范围（SVG 单位），取各谱表五线的最左、最右
+const mRange = measures.map((m, k) => {
+  let a = Infinity, b = -Infinity;
+  for (let i = 0; i < NP; i++) { const g = staffEls[i][k]; if (!g) continue; staffLines(g).forEach(l => { a = Math.min(a, l.x1); b = Math.max(b, l.x2); }); }
+  return a <= b ? [a, b] : [-Infinity, Infinity];
+});
+const mVis = new Array(measures.length).fill(true);
+// 2026-11-11 提速：视口外的小节整个从 DOM 摘下，而不只是 display:none。整乐章（终乐章 119 万个元素）
+// 隐藏的小节仍在树里，浏览器每帧照样要处理，4K 下截图一帧 614 毫秒；摘下后同一帧 125 毫秒，画面不变。
+// 原位留一个注释节点作占位，回到视口附近时插回原处，绘制顺序不变。地址参数 detach=0 退回旧做法。
+const DETACH = new URLSearchParams(location.search).get("detach") !== "0";
+const mPh = DETACH ? measures.map(m => { const c = document.createComment(""); m.parentNode.insertBefore(c, m); return c; }) : [];
+const mIn = new Array(measures.length).fill(true);
+window.renderAt = function (t) {
+  if (t >= 0) t = Math.max(0, t - SYNC_DELAY);       // 只延后乐曲部分的画面，乐章间过渡不受影响
+  const tt = Math.max(t, 0);
+  const { w, rw, centers, rowCenter, z } = t < 0 ? L0 : layout(t);
+  const mp = measurePos(tt);
+
+  // 横向滚动：让时刻 t 对应的谱面位置正好落在播放线上；z < 1 时整体等比缩小（以视口左上角为原点）；
+  // t < 0 时再加上流入偏移
+  const scrollTx = PX - z * U2P(xAt(tt) + PM[0]) + arriveOffset(t);
+  scroller.style.transform = `translate(${scrollTx}px, 0) scale(${z})`;
+  // 只更新视口附近（左右各多留一个视口宽）的小节；其余整小节隐藏（2026-11-09 提速：
+  // 原来每帧给整段所有小节、所有谱表写位置和透明度，密集段一帧要上万次写入，浏览器每帧重画整份总谱）
+  const visU0 = (-VW - scrollTx) / z * K - PM[0], visU1 = (2 * VW - scrollTx) / z * K - PM[0];
+  for (let k = 0; k < measures.length; k++) {
+    mVis[k] = mRange[k][1] >= visU0 && mRange[k][0] <= visU1;
+    if (!DETACH) setS(measures[k], "display", mVis[k] ? "" : "none");
+    else if (mVis[k] !== mIn[k]) {
+      if (mVis[k]) mPh[k].after(measures[k]); else measures[k].remove();
+      mIn[k] = mVis[k];
+    }
+  }
+
+  // 固定谱头：谱面开头滑到左缘（与谱头重合）之后才接上，接上那一刻两者位置完全一致
+  const pinned = t >= 0 && sysLeft(tt, z) <= HDR_PAD * z;
+  sticky.style.display = pinned ? "" : "none";
+  if (pinned) updateHeaderClefs(xAt(tt) - (PX - HDR_W) / z * K);   // 谱头右缘对应的谱面横坐标
+  sticky.style.transform = `scale(${z})`;
+
+  // 纵向：每个谱表移到自己的位置，权重为 0 的隐藏
+  for (let i = 0; i < NP; i++) {
+    const dyU = dyUnits(i, centers[i], z);
+    dyNow[i] = dyU;
+    const vis = w[i] > 0.005;
+    const tr = `translate(0 ${dyU.toFixed(1)})`, op = w[i].toFixed(3), dp = vis ? "" : "none";
+    staffEls[i].forEach((g, k) => {
+      if (!mVis[k]) return;                      // 隐藏的小节不写；重新出现时值不同才写（缓存比较）
+      setA(g, "transform", tr); setS(g, "opacity", op); setS(g, "display", dp);
+    });
+    setA(hdrStaff[i], "transform", tr); setS(hdrStaff[i], "opacity", op); setS(hdrStaff[i], "display", dp);
+  }
+  crossGliss.forEach(g => {
+    const o = dyNow[g.own] || 0;
+    g.path.setAttribute("d", `M${g.x1} ${(g.y1 + (dyNow[g.sA] || 0) - o).toFixed(1)} L${g.x2} ${(g.y2 + (dyNow[g.sB] || 0) - o).toFixed(1)}`);
+    g.path.style.display = "none";   // 用户 2026-11-08：跨行的竖琴滑奏线即使连对了也容易看成连到别的声部，干脆不画（谱面上仍有 gliss. 字样）
+  });
+  // 声部名：每行一个；乐手编号取行内当前权重最大的那条谱表
+  nameEls.forEach((el, k) => {
+    const vis = rw[k] > 0.005;
+    el.style.display = vis ? "" : "none";
+    el.style.top = rowCenter[k] + "px";
+    el.style.opacity = (t < 0 && !NO_INTRO ? 0 : rw[k]).toFixed(3);
+    if (!vis) return;
+    const main = MEMBERS[k].reduce((a, b) => (w[b] > w[a] ? b : a));
+    // 淡入淡出途中的行很窄，只显示声部名，不显示乐手编号小字，免得和相邻行重叠
+    const pl = el.querySelector(".pl"), txt = rw[k] > 0.85 ? playersAt(main, Math.floor(mp + 1e-6)) : "";
+    if (pl.textContent !== txt) pl.textContent = txt;
+  });
+
+  // 正在发声的音符整个染红（带短渐变）；和弦的符干随和弦里任一音符变红
+  noteList.forEach(n => paint(n.el, t >= 0 ? level(n.on, n.off, t) : 0));
+  chordParts.forEach(c => {
+    const k = t >= 0 ? Math.max(...c.ns.map(n => level(n.on, n.off, t))) : 0;
+    c.parts.forEach(p => paint(p, k));
+  });
+  // 符杠、延音线：播放线扫过的部分标红，整组结束后渐变恢复
+  const playX = xAt(tt);
+  sweeps.forEach(s => {
+    const on = t >= 0 && t >= s.tOn - HL_IN0 && t < s.tOff + HL_FADE;
+    s.g.style.display = on ? "" : "none";
+    if (!on) return;
+    s.r.setAttribute("width", Math.max(0, clamp(playX, s.x0, s.x1) - s.x0));
+    s.g.style.opacity = (1 - ramp(t, s.tOff, s.tOff + HL_FADE)).toFixed(3);
+  });
+
+  // 乐章间过渡（t < 0）：先出标题，再由谱面从右侧流入（见 arriveOffset），声部名随谱表进入画面淡入
+  document.getElementById("playhead").style.left = PX + "px";
+  // 乐章结尾（2026-11-09）：谱面照旧滚出画面（不改），右栏卡片、播放线、顶栏乐章名在最后一小节结束后 0.5–2 秒淡出，
+  // 与下一乐章空白的开场衔接；顶栏乐章名在下一乐章标题淡入时一起淡入
+  const outro = D.clipEnd && D.lastRowIsEnd ? 1 - ramp(t, D.clipEnd + 0.5, D.clipEnd + 2.0) : 1;
+  const topIn = NO_INTRO ? 1 : ramp(t, -INTRO, -INTRO + T_TITLE_IN);
+  ["topZh", "topTr", "topIt"].forEach(id => document.getElementById(id).style.opacity = Math.min(outro, topIn).toFixed(3));
+  document.getElementById("playhead").style.opacity = (outro * (NO_INTRO ? 0.7 : 0.7 * ramp(t, -0.6, 0))).toFixed(3);
+  // 标题单独出现在谱面区正中，淡出之后谱面才开始流入（两者不重叠）
+  const tOut1 = -T_ARR - T_GAP, tOut0 = tOut1 - T_TITLE_OUT;
+  const titleIn = ramp(t, -INTRO, -INTRO + T_TITLE_IN), titleOut = 1 - ramp(t, tOut0, tOut1);
+  mvtTitle.style.opacity = t < 0 && !NO_INTRO ? Math.min(titleIn, titleOut) : 0;
+  mvtTitle.style.top = (VH / 2 - mvtTitle.offsetHeight / 2 + 14 * (1 - titleIn) - 14 * (1 - titleOut)) + "px";
+  // 声部名随谱面一起流入（2026-11-09 用户）：谱线起点从视口右缘走到播放线的过程中，名字从右侧 90 像素外滑到原位并淡入
+  nameDX = 0;
+  if (t < 0 && !NO_INTRO) {
+    const a = ramp(sysLeft(t, z), VW, PX + 150);
+    nameDX = 90 * (1 - a);
+    openIdx.forEach(i => { const ne = nameOfPart(i); ne.style.opacity = a.toFixed(3); ne.style.display = ""; });
+  }
+
+  // 卡片：解析卡 1 秒后出现；小卡片 1.4 秒后出现
+  // 全片分段渲染的后续段（cont=1）：卡片从第一帧就在，不再淡入，与上一段接缝一致
+  const cA = CONT ? outro : Math.min(ramp(t, 1.0, 1.7), outro), cB = CONT ? outro : Math.min(ramp(t, 1.4, 2.1), outro);
+  const cardA = document.getElementById("cardA"), cardB = document.getElementById("cardB");
+  if (CARDS) {      // 换卡时只让卡片里的文字淡出淡入，卡片本身不动
+    const c = CARDS.find(c => t >= c.t0 - 0.35 && t < c.t1 - 0.35) || null;
+    showCard(c);
+    cardInner.style.opacity = c ? Math.min(ramp(t, c.t0 - 0.35, c.t0 + 0.15), 1 - ramp(t, c.t1 - 0.85, c.t1 - 0.35)).toFixed(3) : 0;
+    // 段落随录音淡入：还没到的段落先占着位置但不显示，免得后面的字跳动（用户 2026-11-08：解析与录音同步）
+    if (c) cardInner.querySelectorAll("[data-t]").forEach(el => {
+      const pt = Number(el.dataset.t);
+      el.style.opacity = pt <= c.t0 + 0.01 ? 1 : ramp(t, pt - 0.4, pt + 0.4).toFixed(3);
+    });
+  }
+  cardA.style.opacity = cA; cardA.style.transform = `translateY(${(1 - cA) * 18}px)`;
+  cardB.style.opacity = cB; cardB.style.transform = `translateY(${(1 - cB) * 18}px)`;
+  // 卡片讲到的声部：名字放大、变色（用户 2026-11-08），随卡片文字一起淡入淡出。
+  // 逐帧按时间计算，不用 CSS 过渡（逐帧截图时 CSS 过渡的时钟不可靠）。
+  const fl = CARDS ? (Number(cardInner.style.opacity) || 0) : (cA > 0.5 ? 1 : 0);
+  nameEls.forEach((e, k) => {
+    const f = MEMBERS[k].some(i => FOCUS.includes(i)) ? fl : 0;
+    const ease = f * f * (3 - 2 * f);
+    e.style.transformOrigin = "100% 50%";
+    e.style.transform = `translate(${nameDX.toFixed(1)}px, -50%) scale(${(1 + 0.15 * ease).toFixed(3)})`;
+    e.style.color = ease > 0.01 ? `color-mix(in srgb, var(--accent) ${(ease * 100).toFixed(0)}%, var(--ink))` : "";
+    e.style.textShadow = "";   // 用户 2026-11-08：只变色、放大，不要光晕
+  });
+
+  // 个人听感：有就显示在解析卡底部（淡入淡出），解析卡正文不变
+  const op = OPINIONS.find(o => t >= o.t0 - 0.6 && t < o.t1 + 0.6);
+  const opBox = document.getElementById("opinionBox");
+  if (op) {
+    document.getElementById("opTitle").textContent = op.title;
+    document.getElementById("opBody").textContent = op.body;
+    opBox.style.display = "block";               // 样式表里默认是 none，这里必须明确写 block
+    opBox.style.opacity = Math.min(ramp(t, op.t0 - 0.6, op.t0), 1 - ramp(t, op.t1, op.t1 + 0.6)).toFixed(3);
+  } else opBox.style.display = "none";
+
+  // 小卡片：始终显示段落结构（当前段高亮，列表跟着滚动）
+  {
+    // 当前行：包含当前小节的最深一层（有小段就取小段）
+    const mq = Math.min(mp, M_LAST + 0.999);          // 乐章结束之后停在最后一段，不跳回开头
+    let cur = srows.findIndex(r => r.leaf && mq >= r.m0 && mq < r.m1);
+    if (cur < 0) cur = Math.max(0, srows.findIndex(r => mq >= r.m0 && mq < r.m1));
+    const par = srows[cur].parent ? srows.indexOf(srows[cur].parent) : -1;
+    const nVis = Math.max(2, Math.floor(structRows.clientHeight / SROW_H));   // 卡片多高就列几行
+    // 尽量把所属大段的标题也留在视野里；当前行至少前面留一行
+    let first = Math.min(par >= 0 ? par : cur, cur - 1);
+    if (cur - first >= nVis) first = cur - nVis + 1;
+    first = clamp(first, 0, Math.max(0, srows.length - nVis));
+    srows.forEach((r, k) => {
+      r.el.style.top = ((k - first) * SROW_H) + "px";
+      r.el.classList.toggle("cur", k === cur);
+      r.el.classList.toggle("curp", k === par);
+      r.el.querySelector(".bar").style.width = (k === cur ? 100 * clamp((mq - r.m0) / (r.m1 - r.m0), 0, 1) : 0) + "%";
+    });
+  }
+
+  // 进度条：上排全曲（之前的乐章已完成），下排本乐章的排练记号段落
+  const mvFrac = clamp((mp - M_FIRST) / (M_LAST - M_FIRST + 1), 0, 1);
+  mv.forEach((s, k) => s.querySelector(".fill").style.width = (k < MV - 1 ? 100 : k === MV - 1 ? 100 * mvFrac : 0) + "%");
+  rh.forEach(({ el, m0, m1 }) => {
+    const f = clamp((mp - m0) / (m1 - m0), 0, 1);
+    el.querySelector(".fill").style.width = (100 * f) + "%";
+    el.classList.toggle("cur", mp >= m0 && mp < m1);
+  });
+};
+
+window.READY = true;
+window.renderAt(-INTRO);
+</script>
+</body>
+</html>

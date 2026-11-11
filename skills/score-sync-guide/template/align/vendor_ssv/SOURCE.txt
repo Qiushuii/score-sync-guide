@@ -1,0 +1,4 @@
+b0b4c9f34d97cc0f7ee2148965c7c56ab595effd 2026-11-07
+来源：https://github.com/tofucurd/score-sync-video （MIT，见 LICENSE），上面一行是克隆时的提交号与日期。
+只复制了 scripts/score_sync/alignment.py 和 alignment_pipeline.py 两个文件，未改动；__init__.py 是空文件（原包的 __init__ 会引入其余模块）。
+align/ssv_align.py 只调用 extract_features、pitch_bounds、dense_sequence、correct_guide、refine_attack_chain。

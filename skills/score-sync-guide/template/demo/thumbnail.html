@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>视频封面</title>
+<!-- 视频网站用的封面（缩略图），2026-11-09。1280×720 版面，按 2 倍截成 2560×1440。
+     深色底，右侧是本片第一乐章第 45 小节一帧的真实总谱（反色成浅色线条），红色播放线呼应正片；左侧大字标题，缩小后也能读。 -->
+<style>
+  :root { --bg: #16140f; --ink: #f4efe4; --muted: #a39b8b; --red: #d1342b; }
+  html, body { margin: 0; width: 1280px; height: 720px; overflow: hidden; background: var(--bg); }
+  #score { position: absolute; right: 0px; top: -20px; height: 760px; filter: invert(1); opacity: 0.42;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 38%, #000 80%, transparent 100%);
+            mask-image: linear-gradient(90deg, transparent 0%, #000 38%, #000 80%, transparent 100%); }
+  #glow { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 22% 55%, rgba(22,20,15,0.96) 30%, rgba(22,20,15,0) 75%); }
+  #play { position: absolute; left: 905px; /* 播放线 */ top: 0; bottom: 0; width: 5px; background: var(--red); opacity: 0.85;
+    box-shadow: 0 0 22px rgba(209,52,43,0.55); }
+  #txt { position: absolute; left: 78px; top: 0; bottom: 0; display: flex; flex-direction: column; justify-content: center; }
+  .kick { font-family: Georgia, serif; color: var(--muted); font-size: 22px; letter-spacing: 9px; margin-bottom: 18px; }
+  .zh { font-family: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif; color: var(--ink); }
+  .t1 { font-size: 112px; font-weight: 700; letter-spacing: 6px; line-height: 1.05; }
+  .t2 { font-size: 64px; font-weight: 600; letter-spacing: 4px; margin-top: 8px; }
+  .t2 b { color: var(--red); font-weight: 700; }
+  .rule { width: 84px; height: 3px; background: var(--red); margin: 34px 0 26px; }
+  .t3 { font-size: 34px; letter-spacing: 6px; color: var(--ink); }
+  .t4 { font-family: Georgia, serif; font-style: italic; font-size: 20px; color: var(--muted); margin-top: 14px; letter-spacing: 0.5px; }
+</style>
+</head>
+<body>
+<img id="score" src="assets/thumb_score.png" alt="">
+<div id="glow"></div>
+<div id="play"></div>
+<div id="txt">
+  <div class="kick">GUSTAV MAHLER</div>
+  <div class="zh t1">马勒</div>
+  <div class="zh t2">第六交响曲<b>「悲剧」</b></div>
+  <div class="rule"></div>
+  <div class="zh t3">全曲总谱同步 · 导赏</div>
+  <div class="t4">Claudio Abbado · Lucerne Festival Orchestra · 2006</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,1171 @@
+{
+  "_说明": "动机标记的数据。motifs：动机本身（名称、说明、颜色、文献来源）；instances：每一次出现（乐章、声部、小节范围、核对状态、依据）。播放器按 instances 在对应谱表的对应小节下面画半透明底色带，并在最上面一行的上方写标签。颜色避开红色（红色专指正在发声）。status 为\"候选\"的不进成片。 layer：1=贯穿全曲（始终标注），2=只在本乐章标注。由 tools/build_motifs.py 生成，改动请改脚本。 layer：1=贯穿全曲（始终标注），2=只在本乐章标注。由 tools/build_motifs.py 生成，改动请改脚本。",
+  "motifs": {
+    "motto": {
+      "name_zh": "格言动机",
+      "layer": 1,
+      "color": "#c9a227",
+      "desc": "大三和弦转同根小三和弦，下面是定音鼓的特征节奏；全曲的标志",
+      "sources": [
+        "wiki-m6",
+        "jax-notes",
+        "monahan-2015-companion"
+      ]
+    },
+    "march": {
+      "name_zh": "进行曲主题",
+      "layer": 1,
+      "color": "#8e6cc0",
+      "desc": "第一乐章第一主题：八度大跳的进行曲旋律；再现部先以 A 大调回来",
+      "sources": [
+        "wiki-m6"
+      ]
+    },
+    "second": {
+      "name_zh": "第二主题（\"阿尔玛主题\"）",
+      "layer": 1,
+      "color": "#4f86c6",
+      "desc": "第一乐章第二主题，F 大调，Schwungvoll；尾声以 A 大调凯旋。\"阿尔玛主题\"之名据阿尔玛回忆，见 claims.alma-theme",
+      "sources": [
+        "cooke-zander",
+        "monahan-2011",
+        "monahan-2015-companion"
+      ]
+    },
+    "chorale1": {
+      "name_zh": "众赞歌",
+      "layer": 1,
+      "color": "#5aa469",
+      "desc": "第一乐章过渡段的木管众赞歌；再现部节奏紧缩（时值减半）并加钢片琴",
+      "sources": [
+        "usuo-guide",
+        "monahan-2015-companion"
+      ]
+    },
+    "hammer": {
+      "name_zh": "众赞歌 → 大锤主题",
+      "layer": 1,
+      "color": "#2f7d6d",
+      "desc": "终乐章第 49 小节的 C 小调众赞歌；Monahan 指出它变形为过渡主题和大锤落下时的主题（图 7.5）",
+      "sources": [
+        "monahan-2015-companion",
+        "wiki-m6"
+      ]
+    },
+    "andante": {
+      "name_zh": "行板主题",
+      "layer": 2,
+      "color": "#3f9fa6",
+      "desc": "行板的主题，降 E 大调，弱起 E♭–F–G",
+      "sources": []
+    },
+    "trio": {
+      "name_zh": "中段主题（\"老派地\"）",
+      "layer": 2,
+      "color": "#a98ad6",
+      "desc": "谐谑曲中段主题，标 Altväterisch，拍号几乎每小节切换",
+      "sources": [
+        "wiki-m6"
+      ]
+    },
+    "intro4": {
+      "name_zh": "终乐章引子",
+      "layer": 2,
+      "color": "#9c7a54",
+      "desc": "终乐章引子群：竖琴、钢片琴的和弦与小提琴高飞的旋律；在再现部、尾声开头回来（Monahan：每一大块都从引子群开始）",
+      "sources": [
+        "monahan-2015-companion"
+      ]
+    },
+    "p4": {
+      "name_zh": "终乐章第一主题",
+      "layer": 2,
+      "color": "#6b8e23",
+      "desc": "终乐章呈示部第一主题（Allegro energico），A 小调进行曲",
+      "sources": [
+        "monahan-2015-companion"
+      ]
+    }
+  },
+  "instances": [
+    {
+      "motif": "motto",
+      "movement": 1,
+      "label": "格言动机：A 大三和弦 → A 小三和弦",
+      "parts": [
+        {
+          "name": "Oboe 1 - 2",
+          "from": 59,
+          "to": 60
+        },
+        {
+          "name": "Oboe 2 - 3",
+          "from": 59,
+          "to": 60
+        },
+        {
+          "name": "Oboe 3 - 4",
+          "from": 59,
+          "to": 60
+        },
+        {
+          "name": "F Trumpet 1",
+          "from": 59,
+          "to": 60
+        },
+        {
+          "name": "Timpani",
+          "from": 57,
+          "to": 60
+        }
+      ],
+      "status": "已核对（谱面数据 + 原谱 PDF 第 12 页）",
+      "evidence": "tools/find_motto.py --strict 在第一乐章只找到这一处干净的 A 大→A 小三和弦（第 59→60 小节，间隔 4 拍）。原谱 PDF 第 12 页：第 59 小节小号 1·2·3 ff 奏 A 大三和弦、减弱到第 60 小节 pp 的 A 小三和弦，双簧管同时 p<ff>pp、第二三声部 C♯→C；定音鼓（2 Pauker）第 57–60 小节奏格言节奏。原 mxl 把定音鼓第 57–60 小节整段误抄在'长号 1'行（曾误记为'第 59–60 小节缺失'，实为查看时只列了前 10 个音），已由 scores_fixed/corrections.json 的 m1-001、m1-002 在修正副本里改正。",
+      "date": "2026-11-07"
+    },
+    {
+      "motif": "motto",
+      "movement": 4,
+      "label": "格言动机：A 大 → A 小",
+      "parts": [
+        {
+          "name": "Vier Flöten",
+          "index": 2,
+          "from": 10,
+          "to": 11
+        },
+        {
+          "name": "Vier Fagotte",
+          "index": 22,
+          "from": 10,
+          "to": 11
+        },
+        {
+          "name": "Contrafagott",
+          "index": 27,
+          "from": 10,
+          "to": 11
+        },
+        {
+          "name": "Sechs Trompeten",
+          "index": 36,
+          "from": 10,
+          "to": 11
+        },
+        {
+          "name": "Drei Posaunen",
+          "index": 51,
+          "from": 10,
+          "to": 11
+        },
+        {
+          "name": "Bässe",
+          "index": 83,
+          "from": 10,
+          "to": 11
+        },
+        {
+          "name": "2 Paar Pauken",
+          "index": 57,
+          "from": 9,
+          "to": 11
+        }
+      ],
+      "status": "已核对（谱面数据 + Monahan 标注）",
+      "evidence": "12 根音扫描：第 10→11 小节干净的 A 大三和弦转 A 小三和弦，附近有定音鼓起音；Monahan 终乐章缩谱在此标 MOTTO。",
+      "date": "2026-11-07"
+    },
+    {
+      "motif": "motto",
+      "movement": 4,
+      "label": "格言动机：G 大 → G 小",
+      "parts": [
+        {
+          "name": "Vier Flöten",
+          "index": 2,
+          "from": 65,
+          "to": 66
+        },
+        {
+          "name": "Vier Oboen",
+          "index": 6,
+          "from": 65,
+          "to": 66
+        },
+        {
+          "name": "Drei Klarinetten in B",
+          "index": 12,
+          "from": 65,
+          "to": 66
+        },
+        {
+          "name": "A Bass Clarinet",
+          "index": 21,
+          "from": 65,
+          "to": 66
+        },
+        {
+          "name": "Vier Fagotte",
+          "index": 22,
+          "from": 65,
+          "to": 66
+        },
+        {
+          "name": "Contrafagott",
+          "index": 27,
+          "from": 65,
+          "to": 66
+        },
+        {
+          "name": "Acht Hörner in F",
+          "index": 28,
+          "from": 65,
+          "to": 66
+        },
+        {
+          "name": "Sechs Trompeten",
+          "index": 36,
+          "from": 65,
+          "to": 66
+        },
+        {
+          "name": "B♭ Trumpet",
+          "index": 46,
+          "from": 65,
+          "to": 66
+        },
+        {
+          "name": "Bass Tuba in F",
+          "index": 56,
+          "from": 65,
+          "to": 66
+        },
+        {
+          "name": "2 Harfen",
+          "index": 69,
+          "from": 65,
+          "to": 66
+        },
+        {
+          "name": "Bässe",
+          "index": 83,
+          "from": 65,
+          "to": 66
+        },
+        {
+          "name": "2 Paar Pauken",
+          "index": 57,
+          "from": 64,
+          "to": 66
+        }
+      ],
+      "status": "已核对（谱面数据 + Monahan 标注）",
+      "evidence": "12 根音扫描：第 65→66 小节干净的 G 大三和弦转 G 小三和弦，附近有定音鼓起音；Monahan 终乐章缩谱在此标 MOTTO。",
+      "date": "2026-11-07"
+    },
+    {
+      "motif": "motto",
+      "movement": 4,
+      "label": "格言动机：C 大 → C 小",
+      "parts": [
+        {
+          "name": "Vier Flöten",
+          "index": 2,
+          "from": 96,
+          "to": 97
+        },
+        {
+          "name": "Vier Oboen",
+          "index": 6,
+          "from": 96,
+          "to": 97
+        },
+        {
+          "name": "Englisch Horn",
+          "index": 10,
+          "from": 96,
+          "to": 97
+        },
+        {
+          "name": "Drei Klarinetten in B",
+          "index": 12,
+          "from": 96,
+          "to": 97
+        },
+        {
+          "name": "A Bass Clarinet",
+          "index": 21,
+          "from": 96,
+          "to": 97
+        },
+        {
+          "name": "Contrafagott",
+          "index": 27,
+          "from": 96,
+          "to": 97
+        },
+        {
+          "name": "Acht Hörner in F",
+          "index": 31,
+          "from": 96,
+          "to": 97
+        },
+        {
+          "name": "Sechs Trompeten",
+          "index": 36,
+          "from": 96,
+          "to": 97
+        },
+        {
+          "name": "Drei Posaunen",
+          "index": 51,
+          "from": 96,
+          "to": 97
+        },
+        {
+          "name": "Bass Tuba in F",
+          "index": 56,
+          "from": 96,
+          "to": 97
+        },
+        {
+          "name": "2 Harfen",
+          "index": 69,
+          "from": 96,
+          "to": 97
+        },
+        {
+          "name": "Erste Violinen",
+          "index": 76,
+          "from": 96,
+          "to": 97
+        },
+        {
+          "name": "Zweite Violinen",
+          "index": 78,
+          "from": 96,
+          "to": 97
+        },
+        {
+          "name": "Violen",
+          "index": 79,
+          "from": 96,
+          "to": 97
+        },
+        {
+          "name": "Bässe",
+          "index": 83,
+          "from": 96,
+          "to": 97
+        },
+        {
+          "name": "2 Paar Pauken",
+          "index": 57,
+          "from": 95,
+          "to": 97
+        }
+      ],
+      "status": "已核对（谱面数据 + Monahan 标注）",
+      "evidence": "12 根音扫描：第 96→97 小节干净的 C 大三和弦转 C 小三和弦，附近有定音鼓起音；Monahan 终乐章缩谱在此标 MOTTO。",
+      "date": "2026-11-07"
+    },
+    {
+      "motif": "motto",
+      "movement": 4,
+      "label": "格言动机：C 大 → C 小",
+      "parts": [
+        {
+          "name": "Sechs Trompeten",
+          "index": 37,
+          "from": 395,
+          "to": 396
+        },
+        {
+          "name": "B♭ Trumpet",
+          "index": 47,
+          "from": 395,
+          "to": 396
+        },
+        {
+          "name": "2 Paar Pauken",
+          "index": 57,
+          "from": 394,
+          "to": 396
+        }
+      ],
+      "status": "已核对（谱面数据 + Monahan 标注）",
+      "evidence": "12 根音扫描：第 395→396 小节干净的 C 大三和弦转 C 小三和弦，附近有定音鼓起音；Monahan 终乐章缩谱在此标 MOTTO。",
+      "date": "2026-11-07"
+    },
+    {
+      "motif": "motto",
+      "movement": 4,
+      "label": "格言动机：A 大 → A 小",
+      "parts": [
+        {
+          "name": "Vier Flöten",
+          "index": 2,
+          "from": 784,
+          "to": 785
+        },
+        {
+          "name": "Englisch Horn",
+          "index": 10,
+          "from": 784,
+          "to": 785
+        },
+        {
+          "name": "A Clarinet",
+          "index": 15,
+          "from": 784,
+          "to": 785
+        },
+        {
+          "name": "Vier Fagotte",
+          "index": 22,
+          "from": 784,
+          "to": 785
+        },
+        {
+          "name": "Acht Hörner in F",
+          "index": 28,
+          "from": 784,
+          "to": 785
+        },
+        {
+          "name": "Sechs Trompeten",
+          "index": 36,
+          "from": 784,
+          "to": 785
+        },
+        {
+          "name": "2 Paar Pauken",
+          "index": 57,
+          "from": 783,
+          "to": 785
+        }
+      ],
+      "status": "已核对（谱面数据 + Monahan 标注）",
+      "evidence": "12 根音扫描：第 784→785 小节干净的 A 大三和弦转 A 小三和弦，附近有定音鼓起音；Monahan 终乐章缩谱在此标 MOTTO。第 784 小节一带是删去的第三击大锤原位置（Monahan：大锤唯一一次与格言同时）。",
+      "date": "2026-11-07"
+    },
+    {
+      "motif": "motto",
+      "movement": 4,
+      "label": "最后的格言：只剩 A 小三和弦",
+      "parts": [
+        {
+          "name": "Vier Flöten",
+          "index": 2,
+          "from": 818,
+          "to": 820
+        },
+        {
+          "name": "Vier Oboen",
+          "index": 6,
+          "from": 818,
+          "to": 820
+        },
+        {
+          "name": "Klarinette in D",
+          "index": 11,
+          "from": 818,
+          "to": 820
+        },
+        {
+          "name": "A Clarinet",
+          "index": 15,
+          "from": 818,
+          "to": 820
+        },
+        {
+          "name": "Vier Fagotte",
+          "index": 22,
+          "from": 818,
+          "to": 820
+        },
+        {
+          "name": "Contrafagott",
+          "index": 27,
+          "from": 818,
+          "to": 820
+        },
+        {
+          "name": "Acht Hörner in F",
+          "index": 28,
+          "from": 818,
+          "to": 820
+        },
+        {
+          "name": "Sechs Trompeten",
+          "index": 36,
+          "from": 818,
+          "to": 820
+        },
+        {
+          "name": "Drei Posaunen",
+          "index": 54,
+          "from": 818,
+          "to": 820
+        },
+        {
+          "name": "Erste Violinen",
+          "index": 76,
+          "from": 818,
+          "to": 820
+        },
+        {
+          "name": "Zweite Violinen",
+          "index": 78,
+          "from": 818,
+          "to": 820
+        },
+        {
+          "name": "Violen",
+          "index": 79,
+          "from": 818,
+          "to": 820
+        },
+        {
+          "name": "Bässe",
+          "index": 83,
+          "from": 818,
+          "to": 820
+        },
+        {
+          "name": "2 Paar Pauken",
+          "index": 57,
+          "from": 816,
+          "to": 820
+        }
+      ],
+      "status": "候选（文献：Wikipedia、Monahan\"最后的格言：大三和弦被省去\"；谱面上 A 小三和弦与定音鼓待逐声部看谱）",
+      "evidence": "Monahan 缩谱第 41 页 FINAL MOTTO；Wikipedia：终乐章结尾同一节奏、上方只剩 A 小三和弦。",
+      "date": "2026-11-07"
+    },
+    {
+      "motif": "march",
+      "movement": 1,
+      "label": "进行曲主题",
+      "parts": [
+        {
+          "name": "Violin 1",
+          "index": 49,
+          "from": 6,
+          "to": 13
+        },
+        {
+          "name": "Violin 2",
+          "index": 50,
+          "from": 6,
+          "to": 13
+        }
+      ],
+      "status": "已核对（旋律扫描）",
+      "evidence": "motif_scan：第一小提琴第 6–8 小节原型。",
+      "date": "2026-11-07"
+    },
+    {
+      "motif": "march",
+      "movement": 1,
+      "label": "进行曲主题（变形）",
+      "parts": [
+        {
+          "name": "Oboe 1 - 2",
+          "index": 4,
+          "from": 148,
+          "to": 151
+        },
+        {
+          "name": "B♭ Clarinet 1",
+          "index": 10,
+          "from": 148,
+          "to": 151
+        }
+      ],
+      "status": "已核对（旋律扫描，容差 2 个音程）",
+      "evidence": "motif_scan --octave --tol 2：移高 7 个半音。",
+      "date": "2026-11-07"
+    },
+    {
+      "motif": "march",
+      "movement": 1,
+      "label": "进行曲主题：再现，先是 A 大调",
+      "parts": [
+        {
+          "name": "Violin 1",
+          "index": 49,
+          "from": 290,
+          "to": 297
+        },
+        {
+          "name": "Oboe 1 - 2",
+          "index": 4,
+          "from": 290,
+          "to": 293
+        },
+        {
+          "name": "B♭ Clarinet 1",
+          "index": 10,
+          "from": 290,
+          "to": 293
+        }
+      ],
+      "status": "已核对（旋律扫描 + 逐音查看：第 290 小节含 C♯，第 294 小节转回小调）",
+      "evidence": "motif_scan 容差 2（大调使音程差一个半音）；Monahan：再现部从第 286 小节开始。",
+      "date": "2026-11-07"
+    },
+    {
+      "motif": "march",
+      "movement": 1,
+      "label": "进行曲主题（变形）",
+      "parts": [
+        {
+          "name": "Violin 1",
+          "index": 49,
+          "from": 326,
+          "to": 329
+        },
+        {
+          "name": "Violin 2",
+          "index": 50,
+          "from": 326,
+          "to": 329
+        },
+        {
+          "name": "Violoncello",
+          "index": 52,
+          "from": 326,
+          "to": 329
+        }
+      ],
+      "status": "已核对（旋律扫描，容差 2 个音程）",
+      "evidence": "motif_scan --octave --tol 2。",
+      "date": "2026-11-07"
+    },
+    {
+      "motif": "second",
+      "movement": 1,
+      "label": "第二主题（\"阿尔玛主题\"）",
+      "parts": [
+        {
+          "name": "Violin 1",
+          "index": 49,
+          "from": 77,
+          "to": 84
+        },
+        {
+          "name": "Violin 2",
+          "index": 50,
+          "from": 77,
+          "to": 84
+        }
+      ],
+      "status": "已核对（旋律扫描）",
+      "evidence": "motif_scan：原型。",
+      "date": "2026-11-07"
+    },
+    {
+      "motif": "second",
+      "movement": 1,
+      "label": "第二主题",
+      "parts": [
+        {
+          "name": "Violin 1",
+          "index": 49,
+          "from": 85,
+          "to": 92
+        },
+        {
+          "name": "Violin 2",
+          "index": 50,
+          "from": 85,
+          "to": 92
+        }
+      ],
+      "status": "已核对（旋律扫描）",
+      "evidence": "motif_scan：原调重复。",
+      "date": "2026-11-07"
+    },
+    {
+      "motif": "second",
+      "movement": 1,
+      "label": "第二主题（木管）",
+      "parts": [
+        {
+          "name": "Flute 1 - 2",
+          "index": 1,
+          "from": 99,
+          "to": 106
+        },
+        {
+          "name": "Oboe 1 - 2",
+          "index": 4,
+          "from": 99,
+          "to": 106
+        },
+        {
+          "name": "E♭ Clarinet",
+          "index": 8,
+          "from": 99,
+          "to": 106
+        },
+        {
+          "name": "B♭ Clarinet 1",
+          "index": 10,
+          "from": 99,
+          "to": 106
+        }
+      ],
+      "status": "已核对（旋律扫描）",
+      "evidence": "motif_scan：原调，木管。",
+      "date": "2026-11-07"
+    },
+    {
+      "motif": "second",
+      "movement": 1,
+      "label": "第二主题：再现，D 大调",
+      "parts": [
+        {
+          "name": "Violin 1",
+          "index": 49,
+          "from": 371,
+          "to": 378
+        },
+        {
+          "name": "Violin 2",
+          "index": 50,
+          "from": 371,
+          "to": 378
+        }
+      ],
+      "status": "已核对（旋律扫描，差 1 个音程、节奏有变）",
+      "evidence": "motif_scan：移低 15 个半音（即 D 大调）。",
+      "date": "2026-11-07"
+    },
+    {
+      "motif": "second",
+      "movement": 1,
+      "label": "第二主题：A 大调凯旋",
+      "parts": [
+        {
+          "name": "F Trumpet 1",
+          "index": 23,
+          "from": 450,
+          "to": 462
+        },
+        {
+          "name": "Flute 1 - 2",
+          "index": 1,
+          "from": 453,
+          "to": 457
+        },
+        {
+          "name": "Oboe 1 - 2",
+          "index": 4,
+          "from": 453,
+          "to": 457
+        },
+        {
+          "name": "C Clarinet",
+          "index": 9,
+          "from": 453,
+          "to": 457
+        },
+        {
+          "name": "Viola",
+          "index": 51,
+          "from": 453,
+          "to": 458
+        }
+      ],
+      "status": "已核对（旋律扫描，差 1 个音程）",
+      "evidence": "motif_scan：移低 8 个半音（即 A 大调）；Serotsky、Monahan：尾声以第二主题的凯旋陈述结束，S 到达主调大调。",
+      "date": "2026-11-07"
+    },
+    {
+      "motif": "second",
+      "movement": 1,
+      "label": "第二主题（低音乐器）",
+      "parts": [
+        {
+          "name": "Trombone 1",
+          "index": 28,
+          "from": 419,
+          "to": 424
+        },
+        {
+          "name": "Tuba",
+          "index": 30,
+          "from": 419,
+          "to": 424
+        }
+      ],
+      "status": "候选（旋律扫描差 1 个音程，在低音铜管上，听感上是否认得出待听）",
+      "evidence": "motif_scan。",
+      "date": "2026-11-07"
+    },
+    {
+      "motif": "chorale1",
+      "movement": 1,
+      "label": "众赞歌",
+      "parts": [
+        {
+          "name": "Flute 1 - 2",
+          "index": 1,
+          "from": 61,
+          "to": 76
+        },
+        {
+          "name": "Oboe 1 - 2",
+          "index": 4,
+          "from": 61,
+          "to": 76
+        },
+        {
+          "name": "B♭ Clarinet 1",
+          "index": 10,
+          "from": 61,
+          "to": 76
+        },
+        {
+          "name": "Bassoon 1",
+          "index": 15,
+          "from": 61,
+          "to": 76
+        }
+      ],
+      "status": "已核对（旋律扫描）",
+      "evidence": "motif_scan：长笛、双簧管原型；单簧管、巴松为低声部。标 Stets das gleiche Tempo。",
+      "date": "2026-11-07"
+    },
+    {
+      "motif": "chorale1",
+      "movement": 1,
+      "label": "众赞歌：节奏紧缩 + 钢片琴",
+      "parts": [
+        {
+          "name": "Flute 1 - 2",
+          "index": 1,
+          "from": 340,
+          "to": 351
+        },
+        {
+          "name": "Celesta",
+          "index": 46,
+          "from": 340,
+          "to": 351
+        },
+        {
+          "name": "Viola",
+          "index": 51,
+          "from": 340,
+          "to": 351
+        }
+      ],
+      "status": "已核对（旋律扫描 + 时值比较：二分音符变四分音符）",
+      "evidence": "motif_scan；文献：USUO 导赏\"速度加倍、加钢片琴\"。",
+      "date": "2026-11-07"
+    },
+    {
+      "motif": "hammer",
+      "movement": 4,
+      "label": "众赞歌（C 小调）",
+      "parts": [
+        {
+          "name": "Vier Fagotte",
+          "index": 22,
+          "from": 49,
+          "to": 64
+        },
+        {
+          "name": "Contrafagott",
+          "index": 27,
+          "from": 49,
+          "to": 64
+        },
+        {
+          "name": "Bassklarinette in B",
+          "index": 20,
+          "from": 49,
+          "to": 64
+        },
+        {
+          "name": "Acht Hörner in F",
+          "index": 29,
+          "from": 53,
+          "to": 64
+        },
+        {
+          "name": "Bass Tuba in F",
+          "index": 56,
+          "from": 53,
+          "to": 64
+        }
+      ],
+      "status": "已核对（位置：谱面 Schwer. Marcato、调号；旋律在别处找不到，与 Newlin 说法一致）",
+      "evidence": "Monahan 图 7.5：众赞歌 mm. 49–64。",
+      "date": "2026-11-07"
+    },
+    {
+      "motif": "hammer",
+      "movement": 4,
+      "label": "大锤主题（第一击）",
+      "parts": [
+        {
+          "name": "Sechs Trompeten",
+          "index": 37,
+          "from": 336,
+          "to": 350
+        }
+      ],
+      "status": "已核对（旋律扫描：第 336、348 小节小号）",
+      "evidence": "Monahan：大锤主题源自第 49 小节众赞歌。",
+      "date": "2026-11-07"
+    },
+    {
+      "motif": "hammer",
+      "movement": 4,
+      "label": "大锤主题（第二击）",
+      "parts": [
+        {
+          "name": "Sechs Trompeten",
+          "index": 36,
+          "from": 479,
+          "to": 491
+        }
+      ],
+      "status": "已核对（旋律扫描：第 479 小节与第 336 小节原调相同，第 489 小节再现）",
+      "evidence": "motif_scan。",
+      "date": "2026-11-07"
+    },
+    {
+      "motif": "andante",
+      "movement": 2,
+      "label": "行板主题",
+      "parts": [
+        {
+          "name": "Violin 1",
+          "index": 38,
+          "from": 0,
+          "to": 9
+        }
+      ],
+      "status": "已核对（旋律扫描）",
+      "evidence": "motif_scan：原型。",
+      "date": "2026-11-07"
+    },
+    {
+      "motif": "andante",
+      "movement": 2,
+      "label": "行板主题（木管）",
+      "parts": [
+        {
+          "name": "Oboe 1",
+          "index": 3,
+          "from": 99,
+          "to": 106
+        },
+        {
+          "name": "Bb Clarinet 1",
+          "index": 7,
+          "from": 99,
+          "to": 106
+        }
+      ],
+      "status": "已核对（旋律扫描）",
+      "evidence": "motif_scan：原调。",
+      "date": "2026-11-07"
+    },
+    {
+      "motif": "andante",
+      "movement": 2,
+      "label": "行板主题再现",
+      "parts": [
+        {
+          "name": "Violin 1",
+          "index": 38,
+          "from": 28,
+          "to": 35
+        }
+      ],
+      "status": "候选（和声相似度 0.80，旋律未能自动匹配）",
+      "evidence": "similar_passages。",
+      "date": "2026-11-07"
+    },
+    {
+      "motif": "andante",
+      "movement": 2,
+      "label": "行板主题再现",
+      "parts": [
+        {
+          "name": "Violin 1",
+          "index": 38,
+          "from": 173,
+          "to": 180
+        }
+      ],
+      "status": "候选（调号回到降 E 大调，旋律未能自动匹配）",
+      "evidence": "score_facts。",
+      "date": "2026-11-07"
+    },
+    {
+      "motif": "trio",
+      "movement": 3,
+      "label": "中段主题（\"老派地\"）",
+      "parts": [
+        {
+          "name": "Oboe 1",
+          "index": 3,
+          "from": 98,
+          "to": 105
+        }
+      ],
+      "status": "已核对（旋律扫描）",
+      "evidence": "motif_scan：原型。",
+      "date": "2026-11-07"
+    },
+    {
+      "motif": "trio",
+      "movement": 3,
+      "label": "中段主题（第二次中段）",
+      "parts": [
+        {
+          "name": "Oboe 1",
+          "index": 3,
+          "from": 275,
+          "to": 282
+        }
+      ],
+      "status": "已核对（旋律扫描：移高 9 个半音；谱面写'像第一次那样'）",
+      "evidence": "motif_scan。",
+      "date": "2026-11-07"
+    },
+    {
+      "motif": "intro4",
+      "movement": 4,
+      "label": "引子",
+      "parts": [
+        {
+          "name": "Erste Violinen",
+          "index": 76,
+          "from": 1,
+          "to": 8
+        },
+        {
+          "name": "Celesta",
+          "index": 73,
+          "from": 1,
+          "to": 1
+        },
+        {
+          "name": "2 Harfen",
+          "index": 70,
+          "from": 1,
+          "to": 8
+        }
+      ],
+      "status": "已核对（旋律扫描）",
+      "evidence": "motif_scan：第一小提琴第 3–6 小节原型。",
+      "date": "2026-11-07"
+    },
+    {
+      "motif": "intro4",
+      "movement": 4,
+      "label": "引子回来（再现部块开头）",
+      "parts": [
+        {
+          "name": "Erste Violinen",
+          "index": 76,
+          "from": 520,
+          "to": 529
+        }
+      ],
+      "status": "已核对（旋律扫描：第 524 小节原调）",
+      "evidence": "Monahan：再现部块从引子群开始，\"逐小节对应第 17 小节起\"。",
+      "date": "2026-11-07"
+    },
+    {
+      "motif": "intro4",
+      "movement": 4,
+      "label": "引子回来（尾声开头）",
+      "parts": [
+        {
+          "name": "Erste Violinen",
+          "index": 76,
+          "from": 773,
+          "to": 781
+        }
+      ],
+      "status": "已核对（旋律扫描：第 777 小节移低 3 个半音）",
+      "evidence": "Monahan：尾声从引子群开始。",
+      "date": "2026-11-07"
+    },
+    {
+      "motif": "intro4",
+      "movement": 4,
+      "label": "引子回来（展开部块开头，与 S2 混合）",
+      "parts": [
+        {
+          "name": "Erste Violinen",
+          "index": 76,
+          "from": 229,
+          "to": 238
+        }
+      ],
+      "status": "候选（Monahan：\"减弱的引子群\"，旋律未能自动匹配）",
+      "evidence": "Monahan 缩谱第 11 页。",
+      "date": "2026-11-07"
+    },
+    {
+      "motif": "p4",
+      "movement": 4,
+      "label": "第一主题",
+      "parts": [
+        {
+          "name": "Vier Oboen",
+          "index": 6,
+          "from": 114,
+          "to": 121
+        },
+        {
+          "name": "Erste Violinen",
+          "index": 76,
+          "from": 114,
+          "to": 121
+        },
+        {
+          "name": "Zweite Violinen",
+          "index": 78,
+          "from": 114,
+          "to": 121
+        }
+      ],
+      "status": "已核对（旋律扫描）",
+      "evidence": "motif_scan：原型。",
+      "date": "2026-11-07"
+    },
+    {
+      "motif": "p4",
+      "movement": 4,
+      "label": "第一主题：再现",
+      "parts": [
+        {
+          "name": "Erste Violinen",
+          "index": 76,
+          "from": 642,
+          "to": 649
+        },
+        {
+          "name": "Zweite Violinen",
+          "index": 78,
+          "from": 642,
+          "to": 649
+        }
+      ],
+      "status": "候选（和声相似度 0.76、Monahan 说逐小节对应呈示部；本 mxl 的旋律线未能自动匹配，待对原谱）",
+      "evidence": "similar_passages、Monahan。",
+      "date": "2026-11-07"
+    }
+  ]
+}

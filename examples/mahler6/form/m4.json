@@ -1,0 +1,34 @@
+{
+  "_说明": "终乐章曲式（右下结构卡用）。两级，from/to 为谱面小节号。大段采用 Monahan（2015，图 7.1）的四大块：每一块都从引子开始。草稿见 analysis/m4_终乐章.md。",
+  "movement": 4,
+  "note": "扩展的奏鸣曲式，分成四大块，每一块都从引子开始（分段依据 Monahan 2015 与谱面数据）",
+  "sources": ["monahan-2015-companion", "wiki-m6", "usuo-guide"],
+  "sections": [
+    {"label": "呈示部", "from": 1, "to": 228, "basis": "Monahan：呈示部块 228 小节（前呈示阶段 1–113，真正的呈示部 114–228）", "subs": [
+      {"label": "引子", "from": 1, "to": 48, "basis": "第一小提琴第 3–6 小节旋律，motif_scan 已核对；格言动机第 10→11 小节"},
+      {"label": "众赞歌（C 小调）", "from": 49, "to": 66, "basis": "第 49 小节 Schwer. Marcato；Monahan：众赞歌 49，'大锤主题'的来源"},
+      {"label": "积蓄力量", "from": 67, "to": 113, "basis": "Monahan：动员（Mobilization）67；格言第 65、96 小节"},
+      {"label": "第一主题：进行曲", "from": 114, "to": 138, "basis": "第 114 小节 Allegro energico，A 小调；motif_scan 已核对"},
+      {"label": "过渡主题（源自众赞歌）", "from": 139, "to": 190, "basis": "第 139 小节 Pesante；Monahan TR 139，源自第 49 小节众赞歌"},
+      {"label": "第二主题", "from": 191, "to": 228, "basis": "第 191 小节 D 大调 Fliessend；Monahan S1 191、S2 205；'失败的'呈示部"}
+    ]},
+    {"label": "展开部", "from": 229, "to": 519, "basis": "Monahan：展开部块（第一部分 229–388，第二部分 397–519）", "subs": [
+      {"label": "引子回来", "from": 229, "to": 287, "basis": "Monahan：引子群 229；第 239 小节 Langsam. Schleppend，牛铃第 239–249 小节"},
+      {"label": "走向第一击大锤", "from": 288, "to": 363, "basis": "Monahan S2 288；大锤第 336 小节，小号奏'大锤主题'"},
+      {"label": "乌托邦的幻象", "from": 364, "to": 384, "basis": "Monahan：第一次乌托邦幻象（S1）364"},
+      {"label": "混乱，然后进行曲", "from": 385, "to": 457, "basis": "第 385 小节 Alles mit roher Kraft；桦条鞭第 397–405 小节；Monahan：进行曲 397"},
+      {"label": "第二次幻象", "from": 458, "to": 478, "basis": "Monahan：第二次乌托邦幻象 458"},
+      {"label": "第二击大锤", "from": 479, "to": 519, "basis": "大锤第 479 小节，大锤主题与第 336 小节相同"}
+    ]},
+    {"label": "再现部", "from": 520, "to": 772, "basis": "Monahan：再现部块 520–772；再现部本身从第 642 小节开始", "subs": [
+      {"label": "引子回来", "from": 520, "to": 574, "basis": "第 524 小节引子旋律原调回来；牛铃第 554–574 小节"},
+      {"label": "第二主题先回来", "from": 575, "to": 641, "basis": "第 575 小节 Grazioso；Monahan：常被当作'颠倒的'再现部开始，他本人视为前再现"},
+      {"label": "第一主题回来", "from": 642, "to": 727, "basis": "第 642 小节 Tempo I (Allegro energico)；Monahan：逐小节对应呈示部"},
+      {"label": "奔向 A 大调", "from": 728, "to": 772, "basis": "第 728 小节 A 大调；Monahan：超越性的肯定 728、'失败的'再现"}
+    ]},
+    {"label": "尾声", "from": 773, "to": 822, "basis": "Monahan：尾声从引子群开始", "subs": [
+      {"label": "引子回来", "from": 773, "to": 789, "basis": "第 777 小节引子旋律；格言第 784→785 小节（删去的第三击大锤原位置）"},
+      {"label": "最后的格言", "from": 790, "to": 822, "basis": "第 790 小节 Bedeutend langsamer；第 818–820 小节只剩 A 小三和弦"}
+    ]}
+  ]
+}

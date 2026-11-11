@@ -1,0 +1,268 @@
+{
+ "_说明": "导赏卡片里事实性断言的参考资料（用户 2026-11-07 定）：卡片正文在相应断言后加上标编号，全曲结束后在片尾按编号列出。来自乐谱数据的断言标小节号，不进本表。kind：primary 一手资料 / secondary 研究或评述 / reference 百科、节目单等。secondhand=true 表示是转述而非原文。checked：是否已读到原文核实。credibility：给片尾用的可信度说明（只在需要时写）。 每条可有 short：卡片底部注释用的简短引文（2026-11-08 起注释直接显示在卡片正文下方）。",
+ "refs": [
+  {
+   "id": "wiki-m6",
+   "title": "Symphony No. 6 (Mahler)",
+   "author": "Wikipedia",
+   "url": "https://en.wikipedia.org/wiki/Symphony_No._6_(Mahler)",
+   "kind": "reference",
+   "secondhand": false,
+   "checked": "2026-11-07 经网页抓取读到全文摘要；2026-11-08 再次抓取终乐章一节",
+   "used_for": [
+    "格言动机：A 大三和弦转 A 小三和弦，下有定音鼓节奏；终乐章结尾同一节奏、上方只剩 A 小三和弦",
+    "Kahnt 初版与第二版的乐章顺序、大锤次数（CLAUDE.md 第 5 节）",
+    "乐章顺序史：初版谐谑曲在前、埃森排练时改、1919 年阿尔玛电报、Ratz 1963、Kubik 2010",
+    "三击大锤与阿尔玛的解读；第三击被删",
+    "行板引用《亡儿之歌》第一首；牛铃在行板中位于台上",
+    "谐谑曲：阿尔玛的'孩子游戏'说法与作曲时间不合",
+    "Newlin：终乐章不按固定模式，C 小调众赞歌未再现",
+    "终乐章：de La Grange 称之为带引子和尾声的扩展奏鸣曲式（维基转述 de La Grange 第 3 卷 808–841 页）",
+    "终乐章：大锤由五击减为三击、再减为两击（维基转述 de La Grange、Hurwitz 2020、Duggan 2007）",
+    "第三击：Del Mar 与 Matthews 都主张恢复（维基转述 Matthews《The Mahler Companion》1999）"
+   ],
+   "accessed": "2026-11-07",
+   "short": "维基百科：Symphony No. 6 (Mahler)",
+   "cite": "“Symphony No. 6 (Mahler).” *Wikipedia*. Accessed November 7, 2026. https://en.wikipedia.org/wiki/Symphony_No._6_(Mahler)."
+  },
+  {
+   "id": "jax-notes",
+   "title": "Program Notes: Mahler's Symphony for Alma",
+   "author": "Jacksonville Symphony",
+   "url": "https://www.jaxsymphony.org/mahlers-symphony-for-alma/",
+   "kind": "reference",
+   "secondhand": false,
+   "checked": "经搜索摘要读到相关表述",
+   "used_for": [
+    "格言动机：先是小号的大三和弦，紧接双簧管的小三和弦，此音型在后面的乐章再现"
+   ],
+   "accessed": "2026-11-07",
+   "short": "Jacksonville Symphony：Mahler's Symphony for Alma（节目说明）"
+  },
+  {
+   "id": "cooke-zander",
+   "title": "Mahler Symphony No. 6（节目说明，引 Deryck Cooke）",
+   "author": "Benjamin Zander 网站转载",
+   "url": "https://www.benjaminzander.org/uploads/2021/04/Mahler_-Symphony-no.-6.pdf",
+   "kind": "secondary",
+   "secondhand": true,
+   "checked": "经搜索摘要读到：马勒写完第一乐章草稿后从林中下来，对阿尔玛说他试着在一个主题里表现她，不知道是否成功",
+   "used_for": [
+    "阿尔玛主题的来历（轶事）"
+   ],
+   "accessed": "2026-11-07",
+   "short": "Deryck Cooke 节目说明（Benjamin Zander 网站转载），转述阿尔玛回忆",
+   "cite": "“Mahler: Symphony No. 6.” Programme note quoting Deryck Cooke. Benjamin Zander website. Accessed November 7, 2026. https://www.benjaminzander.org/uploads/2021/04/Mahler_-Symphony-no.-6.pdf."
+  },
+  {
+   "id": "alma-memoir",
+   "title": "Gustav Mahler: Memories and Letters（阿尔玛·马勒回忆录）",
+   "author": "Alma Mahler",
+   "url": null,
+   "kind": "primary",
+   "secondhand": false,
+   "checked": "未读到原文",
+   "used_for": [
+    "阿尔玛主题的来历（轶事）的原始出处"
+   ],
+   "accessed": null
+  },
+  {
+   "id": "usuo-guide",
+   "title": "Mahler 6 Listening Guide",
+   "author": "Bettie Jo Basinger（犹他大学），Utah Symphony | Utah Opera",
+   "url": "https://usuo.org/explore/2015/11/mahler-6-listening-guide/",
+   "kind": "reference",
+   "secondhand": false,
+   "checked": "已读全文（经网页抓取）",
+   "used_for": [
+    "各乐章分段描述：第一乐章众赞歌在展开部以降 E 大调回来、再现部加倍速度并加钢片琴、第二主题缩短；行板为回旋曲式、叠句里有《亡儿之歌》第一首终止音型；谐谑曲两个中段；终乐章引子材料、再现部第二主题先于第一主题、两击大锤"
+   ],
+   "accessed": "2026-11-07",
+   "short": "Utah Symphony | Utah Opera：Mahler 6 Listening Guide",
+   "cite": "Basinger, Bettie Jo. “Mahler 6 Listening Guide.” Utah Symphony | Utah Opera, November 2015. Accessed November 7, 2026. https://usuo.org/explore/2015/11/mahler-6-listening-guide/."
+  },
+  {
+   "id": "duggan-musicweb",
+   "title": "The Mahler Symphonies: Symphony No. 6（Mahler 系列评论，2007 年 5 月修订）",
+   "author": "Tony Duggan",
+   "url": "https://www.musicweb-international.com/Mahler/Mahler6.htm",
+   "kind": "secondary",
+   "secondhand": false,
+   "checked": "已读（经网页抓取）",
+   "used_for": [
+    "Altväterisch 是带讽刺意味的标记",
+    "桦条鞭只在两击大锤之间出现",
+    "终乐章结尾是一个拨弦音",
+    "铃声回应第一乐章牧歌段落"
+   ],
+   "accessed": "2026-11-07",
+   "short": "Tony Duggan, The Mahler Symphonies: Symphony No. 6（MusicWeb International）",
+   "cite": "Duggan, Tony. “The Mahler Symphonies: Symphony No. 6.” MusicWeb International, revised May 2007. Accessed November 7, 2026. https://www.musicweb-international.com/Mahler/Mahler6.htm."
+  },
+  {
+   "id": "serotsky-notes",
+   "title": "Mahler – Symphony No. 6（节目说明）",
+   "author": "Paul Serotsky，MusicWeb International",
+   "url": "http://www.musicweb-international.com/Programme_Notes/mahler_sym6.htm",
+   "kind": "reference",
+   "secondhand": false,
+   "checked": "已读（经网页抓取）",
+   "used_for": [
+    "第一乐章尾声以第二主题的凯旋式陈述结束",
+    "行板为变奏曲",
+    "终乐章为扩展奏鸣曲式、展开部三分、再现部压缩"
+   ],
+   "accessed": "2026-11-07",
+   "short": "Paul Serotsky：Mahler – Symphony No. 6（MusicWeb International 节目说明）",
+   "cite": "Serotsky, Paul. “Mahler – Symphony No. 6.” Programme note. MusicWeb International. Accessed November 7, 2026. http://www.musicweb-international.com/Programme_Notes/mahler_sym6.htm."
+  },
+  {
+   "id": "monahan-2011",
+   "title": "\"I have tried to capture you …\": Rethinking the \"Alma\" Theme from Mahler's Sixth Symphony",
+   "author": "Seth Monahan，Journal of the American Musicological Society 64/1 (2011), 119–178",
+   "url": "https://doi.org/10.1525/jams.2011.64.1.119",
+   "kind": "secondary",
+   "secondhand": false,
+   "checked": "只读到摘要",
+   "used_for": [
+    "阿尔玛主题：承认轶事可能属实，但认为主题有怪诞、戏仿成分，不只是赞美"
+   ],
+   "accessed": "2026-11-07",
+   "short": "Seth Monahan, \"I have tried to capture you…\": Rethinking the \"Alma\" Theme, JAMS 64/1（2011）",
+   "cite": "Monahan, Seth. “‘I Have Tried to Capture You …’: Rethinking the ‘Alma’ Theme from Mahler’s Sixth Symphony.” *Journal of the American Musicological Society* 64, no. 1 (2011): 119–78. https://doi.org/10.1525/jams.2011.64.1.119."
+  },
+  {
+   "id": "monahan-2015",
+   "title": "Mahler's Symphonic Sonatas（Oxford Studies in Music Theory）",
+   "author": "Seth Monahan，Oxford University Press，2015",
+   "url": "https://academic.oup.com/book/9862",
+   "kind": "secondary",
+   "secondhand": true,
+   "checked": "书的正文未读；配套网站公开的图表与缩谱已读，见 monahan-2015-companion",
+   "used_for": [
+    "终乐章按奏鸣曲式分析；再现部被'短路'；外乐章作为跨乐章的冲突"
+   ],
+   "accessed": "2026-11-07"
+  },
+  {
+   "id": "samuels-1995",
+   "title": "Mahler's Sixth Symphony: A Study in Musical Semiotics（第 7 章 Motive as sign: an analysis of the Andante）",
+   "author": "Robert Samuels，Cambridge University Press，1995",
+   "url": "https://www.cambridge.org/core/books/mahlers-sixth-symphony/motive-as-sign-an-analysis-of-the-andante/14BEE1C8DAF82F6C00BE29EA6ED68ACA",
+   "kind": "secondary",
+   "secondhand": false,
+   "checked": "只读到摘要",
+   "used_for": [
+    "行板与《亡儿之歌》第一首的终止音型联系"
+   ],
+   "accessed": "2026-11-07",
+   "short": "Robert Samuels, Mahler's Sixth Symphony: A Study in Musical Semiotics（1995）",
+   "cite": "Samuels, Robert. *Mahler’s Sixth Symphony: A Study in Musical Semiotics*. Cambridge: Cambridge University Press, 1995. Chap. 7, “Motive as Sign: An Analysis of the Andante.”"
+  },
+  {
+   "id": "mahlerfoundation",
+   "title": "Symphony No. 6 相关页面（乐章介绍）",
+   "author": "Mahler Foundation",
+   "url": "https://mahlerfoundation.org/category/mahler/compositions/symphony-no-6/",
+   "kind": "reference",
+   "secondhand": false,
+   "checked": "只读到搜索摘要（网站当时超时）",
+   "used_for": [
+    "谐谑曲与第一乐章调性相同（A 小调 / 中段 F 大调）",
+    "谐谑曲回到第一乐章的进行曲节奏，换成三拍子"
+   ],
+   "accessed": "2026-11-07",
+   "short": "Mahler Foundation：Symphony No. 6 乐章介绍",
+   "cite": "Mahler Foundation. “Symphony No. 6.” Accessed November 7, 2026. https://mahlerfoundation.org/category/mahler/compositions/symphony-no-6/."
+  },
+  {
+   "id": "monahan-2015-companion",
+   "title": "Mahler's Symphonic Sonatas — 配套网站图表（Letter Sized Figures；Symphony 6/IV 标注缩谱）",
+   "author": "Seth Monahan，Oxford University Press 配套网站",
+   "url": "https://global.oup.com/us/companion.websites/9780199303465/resources/",
+   "kind": "secondary",
+   "secondhand": false,
+   "checked": "已读：图 4.1–4.15（第一乐章）、7.1–7.15（终乐章）的图注与标注，以及终乐章缩谱全部 41 页的标注文字。书的正文未读。本地副本 ref/monahan_companion_letter_figures.pdf、ref/monahan_companion_sym6_IV.pdf",
+   "used_for": [
+    "第一乐章：呈示部 1–127、展开部 123–285（三个插段、两段 Naturlaut）、再现部 286–373（'失败的'再现）、尾声 374 起（S 在主调大调上挽回）",
+    "终乐章：呈示部块 1–228（前呈示阶段 1–113，P 114、TR 139、S1 191、S2 205，'失败的'呈示部）、展开部块 229–519（大锤主题 336、479）、再现部块 520–772（再现部本身从 642 开始，第 575 小节处注明'普遍被当作颠倒再现的开始'）、尾声 773 起",
+    "众赞歌（m.49–64）是过渡主题与大锤主题的来源（图 7.5）",
+    "格言动机位置；第三击大锤原位置在尾声、与格言同时",
+    "终乐章 S 主题与第一乐章阿尔玛主题的关系（图 7.13，待检验）"
+   ],
+   "accessed": "2026-11-07",
+   "short": "Seth Monahan, Mahler's Symphonic Sonatas（2015），出版社配套图表",
+   "cite": "Monahan, Seth. *Mahler’s Symphonic Sonatas*. Oxford University Press, 2015. Companion website figures. Accessed November 7, 2026. https://global.oup.com/us/companion.websites/9780199303465/resources/."
+  },
+  {
+   "id": "openscore-ktl1",
+   "title": "Mahler, Kindertotenlieder 1. Nun will die Sonn' so hell aufgeh'n（管弦乐总谱，MusicXML）",
+   "author": "OpenScore Transcriptions（MuseScore）",
+   "url": "https://musescore.com/openscore-transcriptions/scores/5418643",
+   "kind": "primary",
+   "secondhand": false,
+   "checked": "用户 2026-11-07 下载；本地 ref/kindertotenlieder_1_openscore.mxl",
+   "used_for": [
+    "检验'行板引用《亡儿之歌》第一首'：两个终止音型在行板中都找不到"
+   ],
+   "accessed": "2026-11-07"
+  }
+ ],
+ "claims": [
+  {
+   "id": "alma-theme",
+   "text_zh": "据阿尔玛·马勒回忆，马勒写完第一乐章的草稿后对她说，他试着在一个主题里表现她——即第一乐章第 77 小节起的第二主题，因此常被称为\"阿尔玛主题\"。",
+   "refs": [
+    "alma-memoir",
+    "cooke-zander"
+   ],
+   "status": "用户 2026-11-07 决定采纳，须加注",
+   "credibility": "此说只出自阿尔玛本人的回忆及据此的转述，没有马勒本人的书面旁证；我们读到的是 Deryck Cooke 的转述，回忆录原文未核。另据资料，阿尔玛回忆录中关于本曲的另一说法（某乐章描写两个孩子的游戏）与作曲时间不合，常被引为其回忆不尽可靠的例子（此点也只见于二手资料，未核原文）。因此片尾应注明：属当事人回忆，可信度有限。",
+   "music_fact_separate": "\"第 77 小节起是第二主题\"是曲式事实，来自谱面（调号改为一个降号即 F 大调、标 Schwungvoll），不依赖此轶事。",
+   "credits_zh": "“阿尔玛主题”：据阿尔玛·马勒回忆，马勒说他试图在第一乐章的第二主题里表现她。此说只见于她本人的回忆及后人的转述，没有马勒本人的书面旁证。"
+  },
+  {
+   "id": "andante-kindertotenlieder",
+   "text": "行板的叠句里引用了《亡儿之歌》第一首 Nun will die Sonn' so hell aufgehn 的终止音型",
+   "refs": [
+    "wiki-m6",
+    "usuo-guide",
+    "samuels-1995",
+    "openscore-ktl1"
+   ],
+   "status": "谱面检验未能证实（歌曲两个终止音型在行板中都找不到）；只能写成'据 Samuels 等'，需读到 Samuels 原文才能确认具体音型",
+   "credibility": null
+  },
+  {
+   "id": "hammer-alma",
+   "text": "据阿尔玛说，三击大锤对应马勒生活中的三次打击；最后一击'把他像树一样砍倒'",
+   "refs": [
+    "wiki-m6"
+   ],
+   "status": "采用时写成'据阿尔玛说'",
+   "credibility": "这三件事都发生在作品完成之后（1907 年），属阿尔玛事后的解读，不是作曲时的标题",
+   "credits_zh": "终乐章的大锤与“三次命运打击”：这是阿尔玛的事后解读。她所说的三件事都发生在 1907 年，晚于作品完成。"
+  },
+  {
+   "id": "scherzo-children",
+   "text": "据阿尔玛说，谐谑曲描绘两个孩子在沙地上摇晃着玩耍",
+   "refs": [
+    "wiki-m6"
+   ],
+   "status": "轶事，与作曲时间不合",
+   "credibility": "谐谑曲写于 1903 年夏，当时长女不满一岁，次女 1904 年才出生",
+   "credits_zh": "谐谑曲“两个孩子在沙地上玩耍”：据阿尔玛回忆。谐谑曲写于 1903 年夏，当时长女不满一岁，次女 1904 年才出生，此说与作曲时间不合。"
+  },
+  {
+   "id": "finale-newlin-chorale",
+   "text": "终乐章呈示部的 C 小调众赞歌主题在再现部没有再现",
+   "refs": [
+    "wiki-m6",
+    "monahan-2015-companion"
+   ],
+   "status": "谱面检验：字面属实（第 49–56 小节旋律别处找不到）；Monahan 指出它变形为过渡主题和大锤主题",
+   "credibility": null
+  }
+ ]
+}

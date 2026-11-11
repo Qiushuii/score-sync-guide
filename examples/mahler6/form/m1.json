@@ -1,0 +1,30 @@
+{
+  "_说明": "第一乐章曲式（右下结构卡用）。两级：sections 是大段，subs 是其中的小段；from/to 是谱面小节号（本 mxl 编号）。依据见各段 basis，草稿见 analysis/m1_第一乐章.md。呈示部反复时，第二遍按同样的小节号再走一次。",
+  "movement": 1,
+  "note": "奏鸣曲式，呈示部反复。分段依据谱面数据与 Monahan（2015）",
+  "sources": ["monahan-2015-companion", "wiki-m6", "usuo-guide"],
+  "sections": [
+    {"label": "呈示部", "from": 1, "to": 127, "basis": "Monahan 图 4.1：呈示部 127 小节；反复记号第 6–127 小节", "subs": [
+      {"label": "第一主题：进行曲", "from": 1, "to": 56, "basis": "第 6 小节第一小提琴主题，motif_scan 已核对"},
+      {"label": "格言动机", "from": 57, "to": 60, "basis": "已对原谱 PDF 第 12 页核实"},
+      {"label": "过渡：木管众赞歌", "from": 61, "to": 76, "basis": "Stets das gleiche Tempo；Monahan TR 61"},
+      {"label": "第二主题", "from": 77, "to": 122, "basis": "F 大调 Schwungvoll；第 77、85、99 小节已核对"},
+      {"label": "回到开头（第一房子）", "from": 123, "to": 127, "basis": "反复第一房子 123–127"}
+    ]},
+    {"label": "展开部", "from": 128, "to": 289, "basis": "Monahan：展开部 163 小节，三个插段；本 mxl 第二遍从第 128 小节进入", "subs": [
+      {"label": "进行曲材料的展开", "from": 128, "to": 197, "basis": "Monahan 插段一（P）、插段二开头"},
+      {"label": "牧歌插段：远处的牛铃", "from": 198, "to": 254, "basis": "牛铃第 202–252 小节（已按原谱修正）；Monahan：Naturlaut（自然之声）"},
+      {"label": "重新发动", "from": 255, "to": 289, "basis": "第 255 小节 Tempo I subito, Sehr energisch!；Monahan 插段三（P）251"}
+    ]},
+    {"label": "再现部", "from": 290, "to": 373, "basis": "第 290 小节第一主题回来（A 大调），motif_scan 已核对；Monahan 286–373", "subs": [
+      {"label": "第一主题：先是 A 大调", "from": 290, "to": 339, "basis": "第 290 小节含 C♯，第 294 小节转回小调"},
+      {"label": "众赞歌：节奏紧缩", "from": 340, "to": 355, "basis": "第 340 小节时值减半、加钢片琴，已核对"},
+      {"label": "第二主题：D 大调，缩短", "from": 356, "to": 373, "basis": "第 356 小节调号 D 大调；第 371 小节旋律已核对；Monahan：'失败的'再现"}
+    ]},
+    {"label": "尾声", "from": 374, "to": 485, "basis": "Monahan：尾声 374 起，107 小节", "subs": [
+      {"label": "进行曲材料", "from": 374, "to": 420, "basis": "Monahan 尾声插段一（P）；第 386 小节 Più mosso subito"},
+      {"label": "第二主题与过渡材料", "from": 421, "to": 447, "basis": "Monahan 尾声插段二（S/TR）"},
+      {"label": "第二主题：A 大调凯旋", "from": 448, "to": 485, "basis": "第 448 小节 A 大调 Pesante；第 450–461 小节旋律已核对；Monahan：S 到达主调大调"}
+    ]}
+  ]
+}

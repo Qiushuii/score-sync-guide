@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>片尾参考资料</title>
+<!-- 片尾（2026-11-09，用户手绘版式）：左上角 Claude 标志与"制作"字样；中间一栏按编号列参考资料（芝加哥格式书目体），
+     内容超出一屏时缓慢上卷；右侧留白。背景色与正片一致。数据来自 credits_data.js（tools/build_refs.py 生成）。
+     renderAt(t) 画出第 t 秒的一帧；总时长 window.SCORE.clipEnd，供 render_frames.py --page credits.html 逐帧渲染。 -->
+<style>
+  :root {
+    --bg: #faf8f3; --ink: #1d1b18; --muted: #8a8478; --rule: #ddd6c8;
+    --accent: #3d5a80; --card: #ffffff; --claude: #d97757;
+  }
+  html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); color: var(--ink);
+    font-family: "Noto Sans SC", "Microsoft YaHei", sans-serif; }
+  #maker { position: absolute; left: 92px; top: 70px; }
+  #maker .row { display: flex; align-items: center; gap: 16px; }
+  #maker svg { width: 46px; height: 46px; }
+  #maker .name { font-family: Georgia, "Times New Roman", serif; font-size: 42px; letter-spacing: 0.5px; }
+  #logo { display: block; height: 50px; }
+  #maker .what { margin: 14px 0 0 2px; font-size: 16px; color: var(--muted); letter-spacing: 4px; }
+  #maker .line { margin: 18px 0 0 0; width: 300px; height: 1px; background: var(--rule); }
+
+  #col { position: absolute; left: 470px; top: 150px; width: 860px; bottom: -2px;
+    background: var(--card); border: 1px solid var(--rule); border-bottom: none; border-radius: 8px 8px 0 0;
+    overflow: hidden; }
+  #fadeTop, #fadeBot { position: absolute; left: 0; right: 0; height: 56px; z-index: 2; pointer-events: none; }
+  #fadeTop { top: 0; background: linear-gradient(var(--card), rgba(255,255,255,0)); }
+  #fadeBot { bottom: 0; background: linear-gradient(rgba(255,255,255,0), var(--card)); }
+  #content { position: absolute; left: 0; top: 0; width: 100%; box-sizing: border-box; padding: 64px 72px 120px; }
+  .kicker { font-family: Georgia, serif; font-style: italic; color: var(--muted); font-size: 18px; letter-spacing: 1px; }
+  h1 { font-family: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif; font-weight: 600; font-size: 38px;
+    letter-spacing: 6px; margin: 6px 0 10px; }
+  .lead { font-size: 16px; color: var(--muted); margin: 0 0 30px; line-height: 1.7; }
+  .rule { height: 1px; background: var(--rule); margin: 0 0 30px; }
+  ol { list-style: none; margin: 0; padding: 0; }
+  li { display: grid; grid-template-columns: 44px 1fr; margin: 0 0 22px; }
+  li .n { font-family: Georgia, serif; color: var(--accent); font-size: 20px; line-height: 1.55; }
+  li .c { font-family: Georgia, "Times New Roman", serif; font-size: 19.5px; line-height: 1.55; overflow-wrap: anywhere; }
+  li .url { color: var(--muted); font-size: 16.5px; }
+  li .sh { font-family: "Noto Sans SC", "Microsoft YaHei", sans-serif; color: var(--muted); font-size: 15px; }
+  h2 { font-family: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif; font-weight: 600; font-size: 24px;
+    letter-spacing: 3px; margin: 44px 0 16px; }
+  .note { font-size: 18px; line-height: 1.8; margin: 0 0 12px; padding-left: 18px; border-left: 3px solid var(--rule); }
+  .small { font-size: 17px; line-height: 1.85; color: #4a463f; margin: 0; }
+</style>
+</head>
+<body>
+<div id="maker">
+  <!-- 标志：用户从官网截图，tools/make_logo.py 抠成透明底 -->
+  <img id="logo" src="assets/logo.png" alt="" onerror="this.style.display='none'">
+  <div class="what">本 片 制 作</div>
+  <div class="line"></div>
+</div>
+<div id="col">
+  <div id="content">
+    <div class="kicker">References</div>
+    <h1>参考资料</h1>
+    <p class="lead">解析卡片上的上标数字对应以下编号；同一出处在全片共用一个编号。出自乐谱本身的分析只标小节号，不另加注。</p>
+    <div class="rule"></div>
+    <ol id="refs"></ol>
+    <h2>关于几则轶事</h2>
+    <div id="notes"></div>
+    <h2>乐谱与录音</h2>
+    <p class="small">乐谱：社区 MusicXML，可能有个别错误；小节号按本谱。个别导入错误对照 C. F. Kahnt 版总谱（1906，IMSLP）修正。</p>
+    <p class="small">谱面排版：Verovio。</p>
+    <p class="small">录音：Claudio Abbado 指挥 Lucerne Festival Orchestra，2006 年。</p>
+  </div>
+  <div id="fadeTop"></div><div id="fadeBot"></div>
+</div>
+<script src="credits_data.js"></script>
+<script>
+const C = window.CREDITS;
+const esc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+// 书目：*书名/期刊名* 排成斜体，网址用浅色小一号
+// 转述的出处在网址前标"（转述）"
+const fmt = (s, sh) => esc(s).replace(/\*([^*]+)\*/g, "<i>$1</i>")
+  .replace(/\s*(https?:\/\/\S+?)(\.?)$/, (m, u, d) => (sh ? ' <span class="sh">（转述）</span>' : "") + `<br><span class="url">${u}</span>${d}`);
+document.getElementById("refs").innerHTML = C.refs.map(r =>
+  `<li><span class="n">${r.n}</span><span class="c">${fmt(r.cite, r.secondhand)}</span></li>`).join("");
+document.getElementById("notes").innerHTML = C.notes.map(x => `<p class="note">${esc(x)}</p>`).join("");
+
+// 时间线：0–1.4 秒淡入；停 4 秒；内容超出一栏时以每秒 42 像素上卷到底；停 6 秒；最后 1.5 秒淡出
+const col = document.getElementById("col"), content = document.getElementById("content");
+const SCROLL = Math.max(0, content.offsetHeight - col.clientHeight);
+const SPEED = 42, T_IN = 1.4, HOLD0 = 4, HOLD1 = 6, T_OUT = 1.5;
+const T_SCROLL = SCROLL / SPEED;
+const DURATION = T_IN + HOLD0 + T_SCROLL + HOLD1 + T_OUT;
+window.SCORE = { clipEnd: DURATION, audio: null };
+const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+const smooth = x => { x = clamp(x, 0, 1); return x * x * (3 - 2 * x); };
+const ramp = (t, a, b) => smooth((t - a) / (b - a));
+window.renderAt = function (t) {
+  const fin = Math.min(ramp(t, 0, T_IN), 1 - ramp(t, DURATION - T_OUT, DURATION));
+  const fin2 = Math.min(ramp(t, 0.4, T_IN + 0.4), 1 - ramp(t, DURATION - T_OUT, DURATION));
+  document.getElementById("maker").style.opacity = fin.toFixed(3);
+  col.style.opacity = fin2.toFixed(3);
+  col.style.transform = `translateY(${(18 * (1 - fin2)).toFixed(1)}px)`;
+  // 上卷用缓入缓出的匀速段：开头和结尾各 2 秒加减速
+  const s0 = T_IN + HOLD0, u = clamp((t - s0) / Math.max(T_SCROLL, 1e-6), 0, 1);
+  const e = Math.min(2 / Math.max(T_SCROLL, 4), 0.5);            // 加减速占比
+  const pos = u < e ? u * u / (2 * e * (1 - e)) : u > 1 - e ? 1 - (1 - u) ** 2 / (2 * e * (1 - e)) : (u - e / 2) / (1 - e);
+  content.style.transform = `translateY(${(-SCROLL * pos).toFixed(1)}px)`;
+  document.getElementById("fadeTop").style.opacity = clamp(SCROLL * pos / 40, 0, 1).toFixed(3);
+  document.getElementById("fadeBot").style.opacity = clamp((SCROLL - SCROLL * pos) / 40, 0, 1).toFixed(3);
+};
+{ const im = document.getElementById("logo");      // 等标志图片加载完再报告就绪
+  if (im.complete) window.READY = true; else im.onload = im.onerror = () => { window.READY = true; }; }
+window.renderAt(new URLSearchParams(location.search).has("t") ? Number(new URLSearchParams(location.search).get("t")) : 6);
+</script>
+</body>
+</html>

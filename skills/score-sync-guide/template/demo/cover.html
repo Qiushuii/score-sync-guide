@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>片头封面</title>
+<!-- 片头封面（2026-11-09，用户：人名一行、作品名一行、"悲剧"一行，下面对应的德文/英文小字，再转场到第一乐章标题）。
+     配色、字体与正片一致（播放页 player.html、片尾 credits.html）；红色细线呼应谱面的播放线与染红。
+     renderAt(t) 画第 t 秒；总时长 window.SCORE.clipEnd。最后几秒全部淡出成空白底色，
+     接第一乐章片段的开场过渡（那里从空白底色淡入乐章标题），两段直接拼接即可。
+     渲染：render_frames.py --page cover.html --t-start 0 -->
+<style>
+  :root { --bg: #faf8f3; --ink: #1d1b18; --muted: #8a8478; --rule: #ddd6c8; --red: #d1342b; }
+  html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); color: var(--ink); }
+  #wrap { position: absolute; left: 0; right: 0; top: 0; bottom: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; padding-bottom: 40px; box-sizing: border-box; }
+  .zh { font-family: "Noto Serif SC", "Source Han Serif SC", "SimSun", serif; text-align: center; }
+  #who { font-size: 34px; letter-spacing: 16px; color: #4a463f; margin: 0 0 30px 16px; }
+  #work { font-size: 84px; font-weight: 600; letter-spacing: 10px; margin: 0 0 22px 10px; }
+  #nick { font-size: 54px; letter-spacing: 12px; margin: 0 0 0 0; color: #2a2723; }
+  #rule { width: 72px; height: 2px; background: var(--red); margin: 52px 0 40px; transform-origin: 50% 50%; }
+  .lat { font-family: Georgia, "Times New Roman", serif; text-align: center; color: var(--muted); }
+  #latWho { font-size: 27px; color: #4a463f; letter-spacing: 3px; margin: 0 0 12px; }
+  #latDe, #latEn { font-size: 23px; font-style: italic; letter-spacing: 0.5px; margin: 0 0 6px; }
+  #perf { position: absolute; left: 0; right: 0; bottom: 92px; text-align: center; }
+  #perfZh { font-size: 22px; letter-spacing: 4px; color: #4a463f; margin-bottom: 8px; }
+  #perfLat { font-size: 18px; letter-spacing: 1px; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div class="zh" id="who">古斯塔夫·马勒</div>
+  <div class="zh" id="work">A小调第六交响曲</div>
+  <div class="zh" id="nick">「悲剧」</div>
+  <div id="rule"></div>
+  <div class="lat" id="latWho">Gustav Mahler</div>
+  <div class="lat" id="latDe">Symphonie Nr. 6 a-Moll „Tragische“</div>
+  <div class="lat" id="latEn">Symphony No. 6 in A minor “Tragic”</div>
+</div>
+<!-- 演奏者（用户 2026-11-09：放在最下面） -->
+<div id="perf">
+  <div class="zh" id="perfZh">克劳迪奥·阿巴多　指挥　　琉森节日管弦乐团</div>
+  <div class="lat" id="perfLat">Claudio Abbado · Lucerne Festival Orchestra · 2006</div>
+</div>
+<script>
+const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+const smooth = x => { x = clamp(x, 0, 1); return x * x * (3 - 2 * x); };
+const ramp = (t, a, b) => smooth((t - a) / (b - a));
+// 逐行淡入（各 0.9 秒、略微上浮），停住，再一起淡出（略微上移），留 0.4 秒空白底色。
+// 用户 2026-11-09：展示时间稍短一点（原 9.8 秒，现 7.2 秒）
+const T_OUT0 = 5.6, T_OUT1 = 6.8, DURATION = 7.2;
+const rows = [["who", 0.3], ["work", 0.75], ["nick", 1.25], ["latWho", 1.9], ["latDe", 2.1], ["latEn", 2.3], ["perf", 2.6]];
+window.SCORE = { clipEnd: DURATION, audio: null };
+window.renderAt = function (t) {
+  const out = ramp(t, T_OUT0, T_OUT1);
+  rows.forEach(([id, t0]) => {
+    const a = ramp(t, t0, t0 + 0.9);
+    const el = document.getElementById(id);
+    el.style.opacity = Math.min(a, 1 - out).toFixed(3);
+    el.style.transform = `translateY(${(14 * (1 - a) - 10 * out).toFixed(1)}px)`;
+  });
+  const r = document.getElementById("rule");
+  r.style.transform = `translateY(${(-10 * out).toFixed(1)}px) scaleX(${ramp(t, 1.6, 2.4).toFixed(3)})`;
+  r.style.opacity = (1 - out).toFixed(3);
+};
+window.renderAt(new URLSearchParams(location.search).has("t") ? Number(new URLSearchParams(location.search).get("t")) : 5);
+document.fonts.ready.then(() => { window.READY = true; });
+</script>
+</body>
+</html>

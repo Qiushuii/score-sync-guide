@@ -1,0 +1,24 @@
+{
+  "_说明": "第三乐章（谐谑曲）曲式（右下结构卡用）。两级，from/to 为谱面小节号。谐谑曲—中段—谐谑曲—中段—谐谑曲—尾声。草稿见 analysis/m3_谐谑曲.md。",
+  "movement": 3,
+  "note": "谐谑曲与两段中段交替，最后是尾声。分段依据谱面的速度与调号变化",
+  "sources": ["serotsky-notes", "usuo-guide", "wiki-m6"],
+  "sections": [
+    {"label": "谐谑曲", "from": 0, "to": 97, "basis": "Wuchtig，A 小调，3/8 拍", "subs": [
+      {"label": "沉重的三拍子", "from": 0, "to": 86, "basis": "定音鼓弱起；第 51–55 小节 3/8 与 4/8 交替"},
+      {"label": "轻快的速度", "from": 87, "to": 97, "basis": "第 87 小节 Flottes Tempo，第 96 小节 rit."}
+    ]},
+    {"label": "中段一：“老派地”", "from": 98, "to": 198, "basis": "第 98 小节 F 大调，Altväterisch，拍号每小节切换", "subs": [
+      {"label": "中段主题", "from": 98, "to": 110, "basis": "双簧管主题，motif_scan 已核对"},
+      {"label": "打断与回复", "from": 111, "to": 183, "basis": "ff 的打断后'又停住'、'像先前一样'，反复几次"},
+      {"label": "再慢一些", "from": 184, "to": 198, "basis": "第 184 小节调号四个降号，Noch etwas langsamer，col legno"}
+    ]},
+    {"label": "谐谑曲", "from": 199, "to": 272, "basis": "第 199 小节 Tempo I subito；第 204 小节 wie gepeitscht", "subs": []},
+    {"label": "中段二", "from": 273, "to": 371, "basis": "第 273 小节'像第一次那样，明显放慢'；旋律与中段一相同（相似度 0.99）", "subs": [
+      {"label": "中段主题", "from": 273, "to": 354, "basis": "第 275 小节双簧管主题，motif_scan 已核对"},
+      {"label": "再慢一些", "from": 355, "to": 371, "basis": "第 355 小节调号六个降号，Ancora meno mosso，col legno"}
+    ]},
+    {"label": "谐谑曲", "from": 372, "to": 400, "basis": "第 372 小节 Tempo I subito", "subs": []},
+    {"label": "尾声", "from": 401, "to": 446, "basis": "第 401 小节 klingen lassen，定音鼓持续到结尾，第 445 小节 Langsam；起点待核", "subs": []}
+  ]
+}

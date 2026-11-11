@@ -1,0 +1,45 @@
+{
+ "_说明": "作品的乐章、谱面、录音对应表。路径相对于项目根目录；sha256 用来核对原文件没有被改动（可留空）。",
+ "movements": [
+  {
+   "id": 1,
+   "name_zh": "第一乐章",
+   "score": "symphony-6-movement-1-mahler.mxl",
+   "structure": "out/symphony-6-movement-1-mahler_structure.json",
+   "audio": "audio/01 Symphony No. 6 in A Minor_ I.m4a",
+   "audio_sample_rate": 44100,
+   "score_sha256": "",
+   "audio_sha256": ""
+  },
+  {
+   "id": 2,
+   "name_zh": "第二乐章 Andante moderato",
+   "score": "symphony-6-movement-2-mahler.mxl",
+   "structure": "out/symphony-6-movement-2-mahler_structure.json",
+   "audio": "audio/02 Symphony No. 6 in A Minor, _.m4a",
+   "audio_sample_rate": 44100,
+   "score_sha256": "",
+   "audio_sha256": ""
+  },
+  {
+   "id": 3,
+   "name_zh": "第三乐章 谐谑曲",
+   "score": "mahler sympony 6 scherzo.mxl",
+   "structure": "out/mahler sympony 6 scherzo_structure.json",
+   "audio": "audio/03 Symphony No. 6 in A Minor, _.m4a",
+   "audio_sample_rate": 44100,
+   "score_sha256": "",
+   "audio_sha256": ""
+  },
+  {
+   "id": 4,
+   "name_zh": "第四乐章 终乐章",
+   "score": "mahler-symphony-no-6-4th-movement.mxl",
+   "structure": "out/mahler-symphony-no-6-4th-movement_structure.json",
+   "audio": "audio/04 Symphony No. 6 in A Minor_ I.m4a",
+   "audio_sample_rate": 48000,
+   "score_sha256": "",
+   "audio_sha256": ""
+  }
+ ]
+}

@@ -1,0 +1,11 @@
+# 排谱、读谱、对齐（本项目在 Python 3.15 上使用）
+verovio
+music21
+librosa
+numpy
+scipy
+numba
+# 可选：音符表与局部精修
+partitura
+parangonar
+tqdm

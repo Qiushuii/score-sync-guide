@@ -1,0 +1,26 @@
+# 录音、视频、谱面一律不进库 / never commit recordings, videos or scores
+*.mkv
+*.mp4
+*.m4a
+*.wav
+*.flac
+*.mp3
+*.mxl
+*.musicxml
+*.pdf
+audio/
+wav/
+scores_fixed/*.mxl
+# 中间结果 / intermediates
+__pycache__/
+out/
+film/
+demo/build*/
+demo/frames*/
+demo/probe/
+demo/cache/
+demo/disputes/
+demo/.edge-profile*/
+align/cache/
+*.bak*
+venv/
